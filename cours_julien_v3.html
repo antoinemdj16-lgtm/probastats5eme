@@ -1,0 +1,2537 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours de Monsieur Julien — Statistiques & Probabilités — 5ème</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   DESIGN SYSTEM — cours proba/stats · M. Julien
+══════════════════════════════════════════════ */
+:root {
+  --bg:      #09090f;
+  --s1:      #0f1019;
+  --s2:      #141522;
+  --border:  #1f2138;
+  --txt:     #eceef8;
+  --muted:   #5c6180;
+  --soft:    #9095b8;
+
+  --lime:    #a8ff6e; --lime-d:rgba(168,255,110,0.08); --lime-b:rgba(168,255,110,0.18);
+  --sky:     #5eb8ff; --sky-d:rgba(94,184,255,0.08);   --sky-b:rgba(94,184,255,0.2);
+  --amber:   #ffbe3d; --amber-d:rgba(255,190,61,0.08); --amber-b:rgba(255,190,61,0.2);
+  --rose:    #ff6b8a; --rose-d:rgba(255,107,138,0.08); --rose-b:rgba(255,107,138,0.2);
+  --violet:  #a07dff; --violet-d:rgba(160,125,255,0.08); --violet-b:rgba(160,125,255,0.2);
+  --teal:    #3fffd2; --teal-d:rgba(63,255,210,0.08);  --teal-b:rgba(63,255,210,0.2);
+
+  /* Couleurs camembert (Julien) */
+  --pie-c1:#e8502a; --pie-c2:#2e7fb8; --pie-c3:#3aaa7a; --pie-c4:#e8a820; --pie-c5:#9b6bb5;
+}
+
+body.light {
+  --bg:#f5f6fa; --s1:#ffffff; --s2:#eef0f8; --border:#d0d4e8;
+  --txt:#1a1b2e; --muted:#7a7fa8; --soft:#4a4f72;
+  --lime:#4a9a00; --lime-d:rgba(74,154,0,0.08); --lime-b:rgba(74,154,0,0.22);
+  --sky:#1a7fd4;  --sky-d:rgba(26,127,212,0.08); --sky-b:rgba(26,127,212,0.22);
+  --amber:#c47800;--amber-d:rgba(196,120,0,0.08);--amber-b:rgba(196,120,0,0.22);
+  --rose:#c0184a; --rose-d:rgba(192,24,74,0.08); --rose-b:rgba(192,24,74,0.22);
+  --violet:#6440cc;--violet-d:rgba(100,64,204,0.08);--violet-b:rgba(100,64,204,0.22);
+  --teal:#007a5e; --teal-d:rgba(0,122,94,0.08);  --teal-b:rgba(0,122,94,0.22);
+}
+
+body, body * { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.25s ease; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg); color:var(--txt);
+  font-family:'Plus Jakarta Sans', sans-serif; min-height:100vh;
+  background-image:
+    radial-gradient(ellipse 70% 40% at 85% 5%,  rgba(160,125,255,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 5%  95%,  rgba(255,190,61,0.03) 0%, transparent 60%);
+}
+
+/* ─── BANDEAU PROFESSEUR ─── */
+.prof-banner {
+  background: linear-gradient(90deg, #a07dff 0%, #6440cc 100%);
+  color: #fff;
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 200;
+}
+.prof-banner span { opacity: 0.75; font-weight: 400; margin-left: 8px; font-size: 12px; }
+body.light .prof-banner { background: linear-gradient(90deg, #6440cc 0%, #4a2fb0 100%); }
+
+/* ─── THEME TOGGLE ─── */
+.theme-toggle {
+  display:flex; align-items:center; justify-content:space-between;
+  margin:16px 20px 0; padding:8px 12px; border-radius:8px;
+  background:var(--s2); border:1px solid var(--border);
+  cursor:pointer; font-size:11px; font-weight:700;
+  color:var(--muted); letter-spacing:0.5px; text-transform:uppercase; user-select:none;
+}
+.theme-toggle:hover { border-color:var(--violet); color:var(--violet); }
+.toggle-track { width:34px; height:18px; border-radius:9px; background:var(--border); position:relative; flex-shrink:0; }
+.toggle-track.on { background:var(--violet); }
+.toggle-thumb { position:absolute; top:3px; left:3px; width:12px; height:12px; border-radius:50%; background:#fff; transition:transform 0.3s; }
+.toggle-track.on .toggle-thumb { transform:translateX(16px); }
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  position:fixed; left:0; top:0; bottom:0; width:220px;
+  background:var(--s1); border-right:1px solid var(--border);
+  padding:28px 0; z-index:100; overflow-y:auto;
+}
+.sidebar::-webkit-scrollbar { width:3px; }
+.sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+.logo { padding:0 20px 22px; border-bottom:1px solid var(--border); margin-bottom:14px; }
+.logo-eyebrow { font-size:9px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--violet); margin-bottom:6px; }
+.logo-title { font-family:'Instrument Serif', serif; font-size:20px; color:var(--txt); line-height:1.15; }
+.logo-level { font-size:11px; color:var(--muted); margin-top:3px; }
+.nav-group { margin-bottom:6px; }
+.nav-label { font-size:8.5px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--muted); padding:0 20px; margin-bottom:4px; display:block; }
+.nlink { display:flex; align-items:center; gap:9px; padding:7px 20px; font-size:12.5px; font-weight:500; color:var(--muted); text-decoration:none; transition:all 0.15s; border-left:2px solid transparent; }
+.nlink:hover, .nlink.on { color:var(--txt); border-left-color:var(--violet); background:rgba(160,125,255,0.04); }
+.nd { width:5px; height:5px; border-radius:50%; background:var(--border); flex-shrink:0; transition:background 0.15s; }
+.nlink:hover .nd, .nlink.on .nd { background:var(--violet); }
+
+/* ─── MAIN ─── */
+.main { margin-left:220px; }
+
+/* ─── HERO ─── */
+.hero {
+  padding:72px 60px 56px; border-bottom:1px solid var(--border);
+  position:relative; overflow:hidden;
+  background:linear-gradient(145deg, #0c090f 0%, var(--bg) 100%);
+}
+.hero::before {
+  content:''; position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, transparent 1px, transparent 64px, rgba(255,255,255,0.012) 65px),
+    repeating-linear-gradient(0deg,  rgba(255,255,255,0.012) 0px, transparent 1px, transparent 64px, rgba(255,255,255,0.012) 65px);
+  pointer-events:none;
+}
+.hero-eyebrow { display:inline-flex; align-items:center; gap:7px; background:var(--violet-d); border:1px solid var(--violet-b); color:var(--violet); font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:5px 12px; border-radius:6px; margin-bottom:22px; }
+.hero-eyebrow::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--violet); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+.hero h1 { font-family:'Instrument Serif', serif; font-size:60px; line-height:1.0; color:var(--txt); margin-bottom:16px; position:relative; z-index:1; }
+.hero h1 em { color:var(--violet); font-style:italic; }
+.hero-desc { font-size:15.5px; color:var(--soft); max-width:520px; line-height:1.65; margin-bottom:30px; }
+.hero-desc strong { color:var(--txt); font-weight:600; }
+.obj-row { display:flex; gap:8px; flex-wrap:wrap; }
+.obj-chip { padding:6px 13px; border-radius:6px; background:var(--s2); border:1px solid var(--border); font-size:12px; font-weight:500; color:var(--soft); display:flex; align-items:center; gap:6px; }
+.hero-deco { position:absolute; right:56px; top:50%; transform:translateY(-50%); font-family:'Instrument Serif', serif; font-style:italic; font-size:140px; color:rgba(160,125,255,0.04); user-select:none; pointer-events:none; line-height:1; }
+
+/* ─── CONTENT ─── */
+.content { padding:52px 60px 100px; max-width:920px; }
+
+/* ─── SECTION ─── */
+.section { margin-bottom:60px; }
+.sec-hdr { display:flex; align-items:flex-start; gap:18px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+.sec-n { font-family:'DM Mono', monospace; font-size:11px; font-weight:500; color:var(--violet); background:var(--violet-d); border:1px solid var(--violet-b); padding:3px 8px; border-radius:5px; margin-top:5px; white-space:nowrap; }
+.sec-title { font-family:'Instrument Serif', serif; font-size:28px; color:var(--txt); line-height:1.15; }
+.sec-sub { font-size:12px; color:var(--muted); margin-top:3px; }
+p { font-size:15px; line-height:1.75; margin-bottom:10px; }
+
+/* ─── CARDS (cours proba) ─── */
+.card { border-radius:10px; padding:18px 22px; margin:14px 0; border:1px solid; }
+.card::before { display:block; font-size:8.5px; font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:10px; }
+.cdef  { background:var(--sky-d);    border-color:var(--sky-b);    } .cdef::before  { content:'DEFINITION'; color:var(--sky);    }
+.cmet  { background:var(--violet-d); border-color:var(--violet-b); } .cmet::before  { content:'METHODE';    color:var(--violet); }
+.cex   { background:var(--teal-d);   border-color:var(--teal-b);   } .cex::before   { content:'EXEMPLE';    color:var(--teal);   }
+.cwarn { background:var(--rose-d);   border-color:var(--rose-b);   } .cwarn::before { content:'ATTENTION';  color:var(--rose);   }
+.ctip  { background:var(--amber-d);  border-color:var(--amber-b);  } .ctip::before  { content:'ASTUCE';     color:var(--amber);  }
+.clife { background:var(--lime-d);   border-color:var(--lime-b);   } .clife::before { content:'VIE REELLE'; color:var(--lime);   }
+.chist { background:rgba(255,190,61,0.06); border-color:var(--amber-b); } .chist::before { content:'LE SAVIEZ-VOUS'; color:var(--amber); }
+
+/* ─── FORMULA BOX ─── */
+.fbox { display:flex; gap:16px; margin:16px 0; flex-wrap:wrap; }
+.fcard { flex:1; min-width:180px; background:var(--s2); border:1px solid var(--border); border-radius:10px; padding:18px 20px; text-align:center; transition:border-color 0.2s; }
+.fcard:hover { border-color:var(--violet); }
+.fcard-title { font-size:9px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+.fcard-formula { font-family:'DM Mono'; font-size:14px; color:var(--violet); font-weight:500; margin-top:8px; }
+.fcard-formula2 { font-family:'DM Mono'; font-size:13px; color:var(--teal); font-weight:500; margin-top:4px; }
+
+/* ─── STEPS (cours proba) ─── */
+.steps { background:var(--s2); border:1px solid var(--border); border-radius:9px; padding:16px 20px; margin:12px 0; font-family:'DM Mono', monospace; font-size:13.5px; }
+.sr { display:grid; grid-template-columns:150px 1fr; gap:12px; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04); align-items:baseline; }
+.sr:last-child { border-bottom:none; }
+.slbl { color:var(--muted); font-size:10.5px; padding-top:2px; }
+.seq .h { color:var(--violet); font-weight:500; }
+.seq .ok { color:var(--teal); }
+
+/* ─── TABLE STATS ─── */
+.stat-table { border-collapse:collapse; width:100%; border-radius:10px; overflow:hidden; margin:14px 0; font-size:13px; }
+.stat-table th { background:var(--s2); border:1px solid var(--border); padding:9px 14px; text-align:center; color:var(--muted); font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+.stat-table td { border:1px solid var(--border); padding:9px 14px; text-align:center; background:var(--s1); color:var(--txt); }
+.stat-table td.hi  { color:var(--teal);   font-weight:700; background:var(--teal-d); }
+.stat-table td.hi2 { color:var(--violet); font-weight:700; background:var(--violet-d); }
+.stat-table td.hi3 { color:var(--amber);  font-weight:700; background:var(--amber-d); }
+.stat-table tr.total td { background:var(--s2); font-weight:700; color:var(--txt); }
+
+/* ─── EXERCISE BLOCKS (proba) ─── */
+.exblk { background:var(--s1); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:18px 0; }
+.exhdr { display:flex; align-items:center; justify-content:space-between; padding:13px 22px; border-bottom:1px solid var(--border); background:var(--s2); }
+.extitle { font-size:14px; font-weight:700; color:var(--txt); }
+.badge { font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:3px 9px; border-radius:5px; }
+.beasy { background:var(--teal-d); color:var(--teal); border:1px solid var(--teal-b); }
+.bmid  { background:var(--amber-d); color:var(--amber); border:1px solid var(--amber-b); }
+.bhard { background:var(--rose-d);  color:var(--rose);  border:1px solid var(--rose-b); }
+.exbody { padding:18px 22px; }
+.exol { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.exol li { display:flex; align-items:baseline; gap:12px; padding:9px 13px; background:var(--s2); border-radius:7px; font-size:14px; }
+.exnum { font-family:'DM Mono'; font-size:11px; font-weight:500; color:var(--violet); min-width:20px; }
+
+/* ─── CORRECTION BUTTONS (proba) ─── */
+.corrBtn { display:inline-flex; align-items:center; gap:6px; margin-top:12px; padding:7px 14px; border-radius:7px; background:transparent; border:1px solid var(--border); color:var(--muted); font-family:'Plus Jakarta Sans'; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; transition:all 0.2s; }
+.corrBtn:hover { border-color:var(--violet); color:var(--violet); }
+.corrPanel { display:none; margin-top:12px; padding:14px 18px; background:var(--violet-d); border:1px solid var(--violet-b); border-radius:8px; font-family:'DM Mono'; font-size:13px; line-height:2; }
+.corrPanel.on { display:block; animation:fu 0.2s ease; }
+@keyframes fu { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+.cl2 { display:flex; gap:14px; align-items:baseline; padding:2px 0; }
+.cn2 { color:var(--violet); font-weight:500; min-width:100px; }
+.ce  { color:var(--txt); }
+
+/* ─── CHECKLIST ─── */
+.cl { list-style:none; display:flex; flex-direction:column; gap:8px; margin:10px 0; }
+.cl li { display:flex; align-items:flex-start; gap:11px; font-size:14.5px; }
+.cn { width:22px; height:22px; border-radius:5px; background:var(--violet-d); border:1px solid var(--violet-b); display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--violet); flex-shrink:0; margin-top:2px; font-family:'DM Mono'; font-weight:500; }
+.al { list-style:none; display:flex; flex-direction:column; gap:7px; margin:10px 0; }
+.al li { display:flex; gap:10px; font-size:14.5px; line-height:1.6; }
+.al li::before { content:'→'; color:var(--amber); font-family:'DM Mono'; flex-shrink:0; margin-top:1px; }
+
+/* ─── PROBA BALLS ─── */
+.balls-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0; }
+.ball { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; font-family:'DM Mono'; border:2px solid; flex-shrink:0; }
+.ball-g { background:rgba(63,255,210,0.18); border-color:var(--teal); color:var(--teal); }
+.ball-y { background:rgba(255,190,61,0.18); border-color:var(--amber); color:var(--amber); }
+.ball-r { background:rgba(255,107,138,0.18); border-color:var(--rose); color:var(--rose); }
+.ball-b { background:rgba(94,184,255,0.18); border-color:var(--sky); color:var(--sky); }
+
+/* ─── FRACTION ─── */
+.frac { display:inline-flex; flex-direction:column; align-items:center; gap:0; font-family:'DM Mono'; font-size:15px; vertical-align:middle; margin:0 4px; }
+.frac-num { border-bottom:1.5px solid currentColor; padding-bottom:2px; line-height:1.2; }
+.frac-den { padding-top:2px; line-height:1.2; }
+
+/* ─── PROB BAR ─── */
+.prob-bar { height:22px; border-radius:6px; background:var(--s2); border:1px solid var(--border); overflow:hidden; margin:6px 0; position:relative; }
+.prob-fill { height:100%; border-radius:6px; transition:width 1s ease; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; font-size:10px; font-weight:700; font-family:'DM Mono'; color:var(--bg); }
+
+/* ─── QUIZ (proba) ─── */
+.qblk { background:var(--s2); border:1px solid var(--border); border-radius:9px; padding:16px 20px; margin-bottom:12px; }
+.qtext { font-size:14px; margin-bottom:12px; font-weight:500; line-height:1.5; }
+.qeq { font-family:'DM Mono'; color:var(--sky); font-size:14px; }
+.qopts { display:flex; gap:8px; flex-wrap:wrap; }
+.qopt { padding:7px 16px; border-radius:7px; background:var(--s1); border:1px solid var(--border); color:var(--txt); font-family:'DM Mono'; font-size:13px; cursor:pointer; transition:all 0.15s; }
+.qopt:hover { border-color:var(--violet); color:var(--violet); }
+.qopt.sel  { border-color:var(--violet); background:var(--violet-d); color:var(--violet); }
+.qopt.good { border-color:var(--teal);   background:var(--teal-d);   color:var(--teal); }
+.qopt.bad  { border-color:var(--rose);   background:var(--rose-d);   color:var(--rose); }
+.qopt:disabled { cursor:not-allowed; }
+.qsubmit { display:inline-flex; align-items:center; gap:8px; margin-top:16px; padding:11px 28px; border-radius:8px; background:var(--violet); border:none; color:#fff; font-family:'Plus Jakarta Sans'; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; transition:opacity 0.2s; }
+.qsubmit:hover { opacity:0.88; }
+.qsubmit:disabled { opacity:0.35; cursor:not-allowed; }
+.qresult { display:none; margin-top:16px; padding:22px; border-radius:10px; text-align:center; }
+.qresult.on { display:block; animation:fu 0.3s ease; }
+.rscore { font-family:'Instrument Serif'; font-size:60px; line-height:1; margin-bottom:8px; }
+.rbar { height:5px; border-radius:3px; background:var(--border); margin:14px 0; overflow:hidden; }
+.rbarfill { height:100%; border-radius:3px; transition:width 0.8s ease; }
+.rmsg { font-size:14px; color:var(--soft); }
+
+/* ─── RAND TRAINING ─── */
+.rand-box { background:var(--s2); border:1px solid var(--border); border-radius:10px; padding:22px; margin:14px 0; }
+.rand-display { font-family:'DM Mono'; font-size:15px; color:var(--txt); text-align:center; padding:18px; background:var(--s1); border-radius:8px; margin-bottom:14px; min-height:60px; display:flex; align-items:center; justify-content:center; white-space:pre-line; }
+.rand-btns { display:flex; gap:10px; flex-wrap:wrap; }
+.rand-btn { padding:8px 18px; border-radius:7px; border:1px solid var(--border); background:transparent; color:var(--muted); font-family:'Plus Jakarta Sans'; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; transition:all 0.2s; }
+.rand-btn:hover { border-color:var(--violet); color:var(--violet); }
+.rand-corr { display:none; margin-top:12px; padding:14px 18px; background:var(--violet-d); border:1px solid var(--violet-b); border-radius:8px; font-family:'DM Mono'; font-size:13px; line-height:2; }
+.rand-corr.on { display:block; animation:fu 0.2s ease; }
+
+/* ─── FEEDBACK ─── */
+.note-chip { display:inline-block; padding:7px 14px; border-radius:7px; border:1px solid var(--border); background:var(--s2); color:var(--soft); font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+.fb-textarea { width:100%; background:var(--s2); border:1px solid var(--border); border-radius:8px; padding:12px 16px; color:var(--txt); font-family:'Plus Jakarta Sans'; font-size:14px; resize:vertical; margin-top:10px; }
+.fb-textarea:focus { outline:none; border-color:var(--violet); }
+.fb-submit { margin-top:10px; padding:10px 24px; border-radius:8px; background:var(--violet); border:none; color:#fff; font-family:'Plus Jakarta Sans'; font-size:13px; font-weight:800; text-transform:uppercase; cursor:pointer; transition:opacity 0.2s; }
+.fb-submit:hover { opacity:0.85; }
+
+/* ══════════════════════════════════════════════
+   DIAGRAMME CIRCULAIRE INTERACTIF (Julien)
+   Classes préfixées "pie-" pour éviter conflits
+══════════════════════════════════════════════ */
+
+/* Table de données du camembert */
+.pie-data-table { border-collapse:collapse; width:100%; margin:14px 0; font-size:13px; border-radius:10px; overflow:hidden; }
+.pie-data-table th { background:var(--s2); border:1px solid var(--border); padding:9px 14px; text-align:center; color:var(--muted); font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+.pie-data-table td { border:1px solid var(--border); padding:9px 14px; text-align:center; background:var(--s1); color:var(--txt); }
+.pie-data-table tr.pie-total td { background:var(--s2); font-weight:700; color:var(--txt); }
+
+/* Wrapper grille camembert + légende */
+.pie-main-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:32px; align-items:center; margin:20px 0;
+  background:var(--s2); border:1px solid var(--border);
+  border-radius:12px; padding:28px;
+}
+@media(max-width:640px){ .pie-main-grid { grid-template-columns:1fr; } }
+
+/* SVG wrapper (anneau) */
+.pie-svg-wrap {
+  position:relative; width:240px; height:240px;
+  margin:0 auto; cursor:pointer; flex-shrink:0;
+}
+.pie-svg-wrap svg {
+  width:100%; height:100%;
+  filter:drop-shadow(0 4px 18px rgba(0,0,0,0.25));
+}
+
+/* Centre du donut */
+.pie-donut-hole {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:80px; height:80px; background:var(--s1);
+  border-radius:50%; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  pointer-events:none; border:2px solid var(--border);
+  transition:border-color 0.25s; text-align:center;
+}
+.pie-donut-hole .pdh-val { font-family:'DM Mono'; font-size:18px; font-weight:700; color:var(--txt); }
+.pie-donut-hole .pdh-lbl { font-size:9px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
+
+/* Secteurs SVG */
+.pie-sector {
+  cursor:pointer;
+  transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), filter 0.25s;
+}
+.pie-sector:hover, .pie-sector.pie-active {
+  transform:scale(1.07);
+  filter:brightness(1.15) drop-shadow(0 0 10px rgba(0,0,0,0.3));
+}
+
+/* Légende */
+.pie-legend { display:flex; flex-direction:column; gap:10px; }
+.pie-legend-item {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 13px; border-radius:8px;
+  background:var(--bg); border:1px solid var(--border);
+  cursor:pointer; transition:all 0.18s;
+}
+.pie-legend-item:hover, .pie-legend-item.pie-active {
+  background:var(--s1); border-color:var(--violet);
+  transform:translateX(4px);
+}
+.pie-legend-dot { width:12px; height:12px; border-radius:3px; flex-shrink:0; }
+.pie-legend-name { font-size:13px; font-weight:600; flex:1; color:var(--txt); }
+.pie-legend-pct  { font-family:'DM Mono'; font-size:12px; color:var(--muted); }
+
+/* Panel d'info cliquable */
+.pie-info-panel {
+  display:none; margin-bottom:14px;
+  padding:16px 20px; background:var(--s1);
+  border:1px solid var(--violet-b); border-radius:10px;
+  font-family:'DM Mono'; font-size:13px; line-height:2;
+  animation:fu 0.2s ease;
+}
+.pie-info-panel.show { display:block; }
+.pip-title { font-family:'Instrument Serif'; font-size:16px; font-weight:700; margin-bottom:8px; color:var(--txt); }
+.pip-row { display:flex; gap:10px; }
+.pip-key { color:var(--muted); min-width:150px; font-size:11px; }
+.pip-val { color:var(--txt); }
+.pip-accent { color:var(--violet); font-weight:600; }
+
+/* Étapes de construction */
+.build-steps {
+  display:flex; gap:0; margin:20px 0; position:relative; flex-wrap:wrap;
+}
+.build-steps::before {
+  content:''; position:absolute; top:22px; left:22px; right:22px;
+  height:2px; background:var(--border); z-index:0;
+}
+.build-step {
+  flex:1; min-width:120px; display:flex; flex-direction:column;
+  align-items:center; gap:8px; padding:0 10px;
+  position:relative; z-index:1; text-align:center;
+}
+.bs-n {
+  width:44px; height:44px; border-radius:50%;
+  background:var(--violet); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'DM Mono'; font-weight:700; font-size:16px;
+  box-shadow:0 2px 12px rgba(160,125,255,0.35);
+}
+.bs-text { font-size:12.5px; line-height:1.4; color:var(--txt); }
+
+/* Formule camembert inline */
+.pie-formula-box {
+  background:var(--s1); border:1px solid var(--violet-b);
+  border-radius:10px; padding:16px 22px; margin:14px 0;
+  font-family:'DM Mono'; font-size:14px; text-align:center;
+  color:var(--txt);
+}
+.pie-formula-box .pfhl { color:var(--violet); font-weight:600; }
+.pie-formula-frac {
+  display:inline-flex; flex-direction:column;
+  align-items:center; vertical-align:middle; margin:0 6px;
+}
+.pie-formula-frac .pfn { border-bottom:1.5px solid var(--sky); padding-bottom:3px; color:var(--sky); }
+.pie-formula-frac .pfd { padding-top:3px; color:var(--teal); }
+
+/* Exercices du camembert (classes propres) */
+.pie-exblk { background:var(--s1); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:18px 0; }
+.pie-exhdr { display:flex; align-items:center; justify-content:space-between; padding:13px 22px; border-bottom:1px solid var(--border); background:var(--s2); }
+.pie-extitle { font-size:14px; font-weight:700; color:var(--txt); }
+.pie-exbody { padding:18px 22px; }
+.pie-exol { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
+.pie-exol li { display:flex; align-items:baseline; gap:12px; padding:9px 13px; background:var(--s2); border-radius:7px; font-size:14px; }
+.pie-exnum { font-family:'DM Mono'; font-size:11px; font-weight:500; color:var(--violet); min-width:20px; }
+
+/* Correction boutons camembert */
+.pie-corrBtn { display:inline-flex; align-items:center; gap:6px; margin-top:12px; padding:7px 14px; border-radius:7px; background:transparent; border:1px solid var(--border); color:var(--muted); font-family:'Plus Jakarta Sans'; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; transition:all 0.2s; }
+.pie-corrBtn:hover { border-color:var(--violet); color:var(--violet); }
+.pie-corrPanel { display:none; margin-top:12px; padding:14px 18px; background:var(--violet-d); border:1px solid var(--violet-b); border-radius:8px; font-family:'DM Mono'; font-size:13px; line-height:2; }
+.pie-corrPanel.on { display:block; animation:fu 0.2s ease; }
+.pie-cr { display:flex; gap:14px; align-items:baseline; padding:2px 0; }
+.pie-ck { color:var(--violet); font-weight:500; min-width:120px; font-size:11px; }
+.pie-ce { color:var(--txt); }
+.pie-cv-ok { color:var(--teal); font-weight:600; }
+
+/* Input exercice 2 camembert */
+.pie-input {
+  font-family:'DM Mono'; font-size:13px;
+  border:1.5px solid var(--border); border-radius:6px;
+  padding:5px 8px; width:80px; text-align:center;
+  background:var(--bg); color:var(--txt); transition:border-color 0.2s;
+}
+.pie-input:focus { outline:none; border-color:var(--violet); }
+.pie-input.pi-ok { border-color:var(--teal); background:var(--teal-d); }
+.pie-input.pi-ko { border-color:var(--rose); background:var(--rose-d); }
+.pie-check-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  margin-top:12px; padding:9px 20px; border-radius:8px;
+  background:var(--violet); border:none; color:#fff;
+  font-family:'Plus Jakarta Sans'; font-size:13px; font-weight:700;
+  cursor:pointer; transition:opacity 0.2s;
+}
+.pie-check-btn:hover { opacity:0.85; }
+.pie-fb { margin-top:8px; font-size:13px; font-weight:600; display:none; }
+.pie-fb.show { display:block; }
+
+/* ─── MISC ─── */
+.divider { height:1px; background:var(--border); margin:52px 0; }
+strong { font-weight:700; }
+.mono { font-family:'DM Mono'; font-size:13px; }
+
+@media (max-width:768px) {
+  .sidebar { display:none; }
+  .main { margin-left:0; }
+  .hero { padding:40px 24px 36px; }
+  .hero h1 { font-size:40px; }
+  .hero-deco { display:none; }
+  .content { padding:28px 20px 60px; }
+  .fbox { flex-direction:column; }
+  .build-steps::before { display:none; }
+}
+
+/* ══════════════════════════════════════════════
+   GAMIFICATION LAYER — ajouté sans modifier l'existant
+══════════════════════════════════════════════ */
+
+/* ─── HUD FLOTTANT ─── */
+#gHUD {
+  position:fixed; top:0; right:0; width:220px;
+  background:var(--s1); border-left:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  border-radius:0 0 0 12px;
+  padding:14px 16px 12px;
+  z-index:300; font-family:'DM Mono',monospace;
+  box-shadow:-4px 4px 24px rgba(0,0,0,0.25);
+  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+#gHUD.hud-hidden { transform:translateX(calc(100% + 4px)); }
+#gHUD-toggle {
+  position:fixed; top:12px; right:228px;
+  width:32px; height:32px; border-radius:50%;
+  background:var(--violet); border:none; color:#fff;
+  font-size:14px; cursor:pointer; z-index:301;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 12px rgba(160,125,255,0.4);
+  transition:right 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+#gHUD-toggle.hud-hidden { right:8px; }
+.hud-title {
+  font-size:8.5px; font-weight:700; letter-spacing:2.5px;
+  text-transform:uppercase; color:var(--muted); margin-bottom:10px;
+}
+.hud-level-badge {
+  display:flex; align-items:center; gap:8px; margin-bottom:10px;
+}
+.hud-level-icon {
+  width:32px; height:32px; border-radius:8px;
+  background:var(--violet-d); border:1px solid var(--violet-b);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px;
+}
+.hud-level-info { flex:1; }
+.hud-level-name { font-size:12px; font-weight:700; color:var(--txt); line-height:1; }
+.hud-level-sub  { font-size:10px; color:var(--muted); margin-top:2px; }
+
+/* Barre XP globale */
+.hud-xp-label { display:flex; justify-content:space-between; margin-bottom:4px; }
+.hud-xp-label span { font-size:10px; color:var(--muted); }
+.hud-xp-label strong { font-size:10px; color:var(--violet); }
+.hud-xp-track {
+  height:6px; border-radius:3px; background:var(--s2);
+  border:1px solid var(--border); overflow:hidden; margin-bottom:10px;
+}
+.hud-xp-fill {
+  height:100%; border-radius:3px;
+  background:linear-gradient(90deg, var(--violet) 0%, var(--sky) 100%);
+  transition:width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Compétences */
+.hud-skills { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+.hud-skill-row { display:flex; align-items:center; gap:8px; }
+.hud-skill-icon { font-size:12px; width:16px; text-align:center; }
+.hud-skill-label { font-size:10px; color:var(--muted); flex:1; }
+.hud-skill-track {
+  width:60px; height:4px; border-radius:2px;
+  background:var(--s2); overflow:hidden;
+}
+.hud-skill-fill { height:100%; border-radius:2px; transition:width 0.5s ease; }
+.hud-skill-xp { font-size:9px; color:var(--soft); min-width:28px; text-align:right; }
+
+/* Badges dans le HUD */
+.hud-badges { display:flex; gap:6px; flex-wrap:wrap; }
+.hud-badge-slot {
+  width:30px; height:30px; border-radius:8px;
+  background:var(--s2); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; filter:grayscale(1); opacity:0.35;
+  transition:all 0.3s; cursor:default; position:relative;
+}
+.hud-badge-slot.unlocked {
+  filter:none; opacity:1;
+  border-color:var(--violet-b); background:var(--violet-d);
+  box-shadow:0 0 8px rgba(160,125,255,0.3);
+}
+.hud-badge-slot[title]:hover::after {
+  content:attr(title);
+  position:absolute; bottom:calc(100% + 6px); left:50%;
+  transform:translateX(-50%);
+  background:var(--s1); border:1px solid var(--border);
+  color:var(--txt); font-size:10px; white-space:nowrap;
+  padding:4px 8px; border-radius:5px; pointer-events:none;
+  font-family:'Plus Jakarta Sans'; font-weight:600;
+}
+
+/* ─── OBJECTIF PAR SECTION ─── */
+.g-objective {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--lime-d); border:1px solid var(--lime-b);
+  color:var(--lime); font-size:12px; font-weight:600;
+  padding:6px 14px; border-radius:20px; margin-bottom:16px;
+}
+.g-objective::before { content:'🎯'; font-size:13px; }
+
+/* ─── MINI-DÉFI ─── */
+.g-challenge {
+  background:var(--s2); border:1px solid var(--amber-b);
+  border-radius:10px; padding:16px 20px; margin:18px 0;
+  position:relative; overflow:hidden;
+}
+.g-challenge::before {
+  content:''; position:absolute; top:0; left:0;
+  width:3px; height:100%; background:var(--amber);
+}
+.g-challenge-header {
+  display:flex; align-items:center; gap:8px; margin-bottom:10px;
+}
+.g-challenge-tag {
+  font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:var(--amber); background:var(--amber-d); border:1px solid var(--amber-b);
+  padding:3px 8px; border-radius:4px;
+}
+.g-challenge-timer {
+  font-family:'DM Mono'; font-size:11px; color:var(--rose); margin-left:auto;
+  font-weight:700;
+}
+.g-challenge-q { font-size:14px; font-weight:600; margin-bottom:12px; color:var(--txt); }
+.g-challenge-opts { display:flex; gap:8px; flex-wrap:wrap; }
+.g-copt {
+  padding:7px 16px; border-radius:7px;
+  background:var(--s1); border:1.5px solid var(--border);
+  color:var(--txt); font-family:'DM Mono'; font-size:13px;
+  cursor:pointer; transition:all 0.15s;
+}
+.g-copt:hover { border-color:var(--amber); color:var(--amber); }
+.g-copt.gc-ok  { border-color:var(--teal); background:var(--teal-d); color:var(--teal); }
+.g-copt.gc-ko  { border-color:var(--rose); background:var(--rose-d); color:var(--rose); }
+.g-copt:disabled { cursor:not-allowed; opacity:0.7; }
+.g-challenge-fb {
+  margin-top:10px; font-size:13px; font-weight:600;
+  display:none; line-height:1.5;
+}
+.g-challenge-fb.show { display:block; animation:fu 0.2s ease; }
+.g-xp-reward {
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:'DM Mono'; font-size:11px; font-weight:700;
+  color:var(--violet); margin-top:6px;
+}
+
+/* ─── MODE SÉLECTEUR ─── */
+.g-mode-selector {
+  display:flex; gap:8px; margin:20px 0 28px; flex-wrap:wrap;
+}
+.g-mode-btn {
+  flex:1; min-width:100px;
+  padding:10px 14px; border-radius:9px;
+  border:1.5px solid var(--border); background:var(--s2);
+  cursor:pointer; text-align:center; transition:all 0.2s;
+  font-family:'Plus Jakarta Sans';
+}
+.g-mode-btn .gm-icon { font-size:18px; display:block; margin-bottom:4px; }
+.g-mode-btn .gm-name { font-size:12px; font-weight:700; color:var(--txt); display:block; }
+.g-mode-btn .gm-desc { font-size:10px; color:var(--muted); display:block; margin-top:2px; }
+.g-mode-btn:hover { border-color:var(--violet); }
+.g-mode-btn.gm-active { border-color:var(--violet); background:var(--violet-d); }
+.g-mode-btn.gm-active .gm-name { color:var(--violet); }
+
+/* ─── TOAST NOTIFICATION ─── */
+#gToastContainer {
+  position:fixed; bottom:28px; left:50%;
+  transform:translateX(-50%);
+  display:flex; flex-direction:column; gap:8px;
+  align-items:center; z-index:500; pointer-events:none;
+}
+.g-toast {
+  background:var(--s1); border:1px solid var(--border);
+  border-radius:24px; padding:10px 20px;
+  font-family:'DM Mono'; font-size:13px; font-weight:500;
+  color:var(--txt); box-shadow:0 4px 24px rgba(0,0,0,0.3);
+  animation:toastIn 0.3s ease, toastOut 0.4s ease 2.4s forwards;
+  display:flex; align-items:center; gap:8px;
+  white-space:nowrap;
+}
+.g-toast.toast-xp { border-color:var(--violet-b); color:var(--violet); }
+.g-toast.toast-ok { border-color:var(--teal-b);   color:var(--teal);   }
+.g-toast.toast-ko { border-color:var(--rose-b);    color:var(--rose);   }
+.g-toast.toast-badge { border-color:var(--amber-b); color:var(--amber); }
+@keyframes toastIn  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes toastOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-8px)} }
+
+/* ─── ÉCRAN FINAL ─── */
+#gEndScreen {
+  display:none; position:fixed; inset:0;
+  background:rgba(9,9,15,0.95); z-index:999;
+  align-items:center; justify-content:center;
+  backdrop-filter:blur(8px);
+}
+#gEndScreen.show { display:flex; }
+.g-end-card {
+  background:var(--s1); border:1px solid var(--border);
+  border-radius:20px; padding:48px 52px; max-width:500px; width:90%;
+  text-align:center; box-shadow:0 24px 80px rgba(0,0,0,0.5);
+  animation:fu 0.4s ease;
+}
+.g-end-emoji { font-size:64px; display:block; margin-bottom:16px; line-height:1; }
+.g-end-title {
+  font-family:'Instrument Serif',serif; font-size:34px;
+  color:var(--txt); margin-bottom:8px; line-height:1.1;
+}
+.g-end-title em { color:var(--violet); font-style:italic; }
+.g-end-sub { font-size:14px; color:var(--soft); margin-bottom:28px; line-height:1.6; }
+.g-end-stats { display:flex; gap:16px; justify-content:center; margin-bottom:28px; flex-wrap:wrap; }
+.g-end-stat {
+  padding:12px 20px; border-radius:10px;
+  background:var(--s2); border:1px solid var(--border); text-align:center;
+}
+.g-end-stat-val { font-family:'DM Mono'; font-size:24px; font-weight:700; color:var(--violet); }
+.g-end-stat-lbl { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
+.g-end-badges { display:flex; gap:10px; justify-content:center; margin-bottom:24px; }
+.g-end-badge {
+  width:44px; height:44px; border-radius:10px;
+  background:var(--violet-d); border:1px solid var(--violet-b);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px;
+}
+.g-end-msg {
+  font-size:15px; font-weight:600; color:var(--teal);
+  margin-bottom:24px; padding:14px 20px;
+  background:var(--teal-d); border:1px solid var(--teal-b);
+  border-radius:10px;
+}
+.g-end-close {
+  padding:12px 32px; border-radius:10px;
+  background:var(--violet); border:none; color:#fff;
+  font-family:'Plus Jakarta Sans'; font-size:14px; font-weight:800;
+  text-transform:uppercase; cursor:pointer; transition:opacity 0.2s;
+}
+.g-end-close:hover { opacity:0.85; }
+
+/* ─── XP POPUP (animation flottante) ─── */
+.g-xp-pop {
+  position:fixed; font-family:'DM Mono'; font-size:14px;
+  font-weight:700; color:var(--violet); pointer-events:none;
+  z-index:600; animation:xpFloat 1.4s ease forwards;
+}
+@keyframes xpFloat {
+  0%   { opacity:1; transform:translateY(0) scale(1); }
+  60%  { opacity:1; transform:translateY(-30px) scale(1.15); }
+  100% { opacity:0; transform:translateY(-55px) scale(0.9); }
+}
+
+/* ─── NARRATION BLOC ─── */
+.g-narration {
+  display:flex; gap:12px; align-items:flex-start;
+  background:var(--s2); border:1px solid var(--violet-b);
+  border-radius:10px; padding:14px 18px; margin-bottom:24px;
+  font-size:13.5px; line-height:1.65; color:var(--soft);
+}
+.g-narration-avatar {
+  width:36px; height:36px; border-radius:50%;
+  background:var(--violet-d); border:1px solid var(--violet-b);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0;
+}
+.g-narration strong { color:var(--txt); }
+
+/* ─── PROGRESSION SECTION BADGE ─── */
+.g-section-progress {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:8px;
+}
+.g-section-prog-bar {
+  flex:1; height:3px; border-radius:2px; background:var(--border); overflow:hidden;
+}
+.g-section-prog-fill {
+  height:100%; border-radius:2px; background:var(--violet);
+  transition:width 0.5s ease;
+}
+.g-section-prog-label {
+  font-family:'DM Mono'; font-size:9px; color:var(--muted);
+  white-space:nowrap;
+}
+
+/* ─── MODE BADGE IN SIDEBAR ─── */
+.g-sidebar-hud {
+  margin:12px 20px 0;
+  padding:10px 12px; border-radius:8px;
+  background:var(--s2); border:1px solid var(--border);
+}
+.g-sidebar-xp-row {
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:11px; margin-bottom:6px;
+}
+.g-sidebar-xp-val { font-family:'DM Mono'; color:var(--violet); font-weight:700; }
+.g-sidebar-track {
+  height:4px; border-radius:2px; background:var(--border); overflow:hidden;
+}
+.g-sidebar-fill {
+  height:100%; border-radius:2px;
+  background:linear-gradient(90deg, var(--violet), var(--sky));
+  transition:width 0.5s ease;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ BANDEAU PROF ══════════════ -->
+<div class="prof-banner">
+  👨‍🏫 Cours de Monsieur JULIEN
+  <span>Mathématiques · Classe de 5ème · Statistiques &amp; Probabilités</span>
+</div>
+
+<!-- ══════════════ HUD GAMIFICATION ══════════════ -->
+<button id="gHUD-toggle" onclick="gHUDtoggle()" title="Afficher/masquer le tableau de bord">◀</button>
+<div id="gHUD">
+  <div class="hud-title">📊 Tableau de bord</div>
+  <!-- Niveau -->
+  <div class="hud-level-badge">
+    <div class="hud-level-icon" id="gLevelIcon">🌱</div>
+    <div class="hud-level-info">
+      <div class="hud-level-name" id="gLevelName">Débutant</div>
+      <div class="hud-level-sub" id="gLevelSub">Niveau 1</div>
+    </div>
+  </div>
+  <!-- XP global -->
+  <div class="hud-xp-label">
+    <span>XP Total</span><strong id="gXPLabel">0 / 50</strong>
+  </div>
+  <div class="hud-xp-track"><div class="hud-xp-fill" id="gXPFill" style="width:0%"></div></div>
+  <!-- Compétences -->
+  <div class="hud-skills">
+    <div class="hud-skill-row">
+      <span class="hud-skill-icon">📊</span>
+      <span class="hud-skill-label">Statistiques</span>
+      <div class="hud-skill-track"><div class="hud-skill-fill" id="gSkStatFill" style="width:0%;background:var(--sky)"></div></div>
+      <span class="hud-skill-xp" id="gSkStatXP">0</span>
+    </div>
+    <div class="hud-skill-row">
+      <span class="hud-skill-icon">📈</span>
+      <span class="hud-skill-label">Diagrammes</span>
+      <div class="hud-skill-track"><div class="hud-skill-fill" id="gSkDiagFill" style="width:0%;background:var(--teal)"></div></div>
+      <span class="hud-skill-xp" id="gSkDiagXP">0</span>
+    </div>
+    <div class="hud-skill-row">
+      <span class="hud-skill-icon">🎲</span>
+      <span class="hud-skill-label">Probabilités</span>
+      <div class="hud-skill-track"><div class="hud-skill-fill" id="gSkProbFill" style="width:0%;background:var(--violet)"></div></div>
+      <span class="hud-skill-xp" id="gSkProbXP">0</span>
+    </div>
+  </div>
+  <!-- Badges -->
+  <div class="hud-title">🏆 Badges</div>
+  <div class="hud-badges">
+    <div class="hud-badge-slot" id="gb-stat" title="Maître des statistiques">📊</div>
+    <div class="hud-badge-slot" id="gb-diag" title="Expert des diagrammes">📈</div>
+    <div class="hud-badge-slot" id="gb-prob" title="Boss des probabilités">🎲</div>
+    <div class="hud-badge-slot" id="gb-quiz" title="Champion du quiz">🏆</div>
+    <div class="hud-badge-slot" id="gb-all"  title="Maître complet">⭐</div>
+  </div>
+</div>
+
+<!-- ══════════════ TOAST CONTAINER ══════════════ -->
+<div id="gToastContainer"></div>
+
+<!-- ══════════════ ÉCRAN FINAL ══════════════ -->
+<div id="gEndScreen">
+  <div class="g-end-card">
+    <span class="g-end-emoji" id="gEndEmoji">🎉</span>
+    <div class="g-end-title">Mission <em>accomplie</em> !</div>
+    <div class="g-end-sub" id="gEndSub">Tu as terminé le cours de statistiques &amp; probabilités.</div>
+    <div class="g-end-stats">
+      <div class="g-end-stat">
+        <div class="g-end-stat-val" id="gEndXP">0</div>
+        <div class="g-end-stat-lbl">XP Total</div>
+      </div>
+      <div class="g-end-stat">
+        <div class="g-end-stat-val" id="gEndLevel">Débutant</div>
+        <div class="g-end-stat-lbl">Niveau</div>
+      </div>
+      <div class="g-end-stat">
+        <div class="g-end-stat-val" id="gEndBadges">0/5</div>
+        <div class="g-end-stat-lbl">Badges</div>
+      </div>
+    </div>
+    <div class="g-end-badges" id="gEndBadgeList"></div>
+    <div class="g-end-msg" id="gEndMsg">Continue comme ça ! 🔥</div>
+    <button class="g-end-close" onclick="document.getElementById('gEndScreen').classList.remove('show')">✕ Continuer à réviser</button>
+  </div>
+</div>
+
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<nav class="sidebar" role="navigation" aria-label="Navigation du cours">
+  <div class="logo">
+    <div class="logo-eyebrow">M. Julien · 5ème</div>
+    <div class="logo-title">Stats &amp;<br>Probabilités</div>
+    <div class="logo-level">Cours complet + exercices</div>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Le cours</span>
+    <a class="nlink on" href="#s1"><span class="nd"></span>Effectifs &amp; fréquences</a>
+    <a class="nlink" href="#s2"><span class="nd"></span>Moyenne</a>
+    <a class="nlink" href="#s3"><span class="nd"></span>Diagrammes</a>
+    <a class="nlink" href="#s4"><span class="nd"></span>Expérience aléatoire</a>
+    <a class="nlink" href="#s5"><span class="nd"></span>Probabilités</a>
+  </div>
+  <div class="nav-group" style="margin-top:10px;">
+    <span class="nav-label">Pratique</span>
+    <a class="nlink" href="#s6"><span class="nd"></span>Exercices</a>
+    <a class="nlink" href="#s7"><span class="nd"></span>Entraînement</a>
+    <a class="nlink" href="#s8"><span class="nd"></span>Quiz final</a>
+    <a class="nlink" href="#s9"><span class="nd"></span>Synthèse</a>
+    <a class="nlink" href="#sfeedback" style="color:var(--amber);"><span class="nd" style="background:var(--amber-d);border:1px solid var(--amber-b);"></span>Votre avis</a>
+  </div>
+  <!-- Mini XP sidebar -->
+  <div class="g-sidebar-hud">
+    <div class="g-sidebar-xp-row">
+      <span style="font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;">XP</span>
+      <span class="g-sidebar-xp-val" id="gSideXP">0 pts</span>
+    </div>
+    <div class="g-sidebar-track"><div class="g-sidebar-fill" id="gSideFill" style="width:0%"></div></div>
+  </div>
+  <div class="theme-toggle" onclick="toggleTheme()" title="Basculer mode jour / nuit">
+    <span id="themeLabel">☀️ Mode jour</span>
+    <div class="toggle-track" id="toggleTrack"><div class="toggle-thumb"></div></div>
+  </div>
+</nav>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<div class="main">
+  <div class="hero">
+    <div class="hero-deco">p = n/N</div>
+    <div style="font-size:12px;font-weight:700;letter-spacing:1px;color:var(--amber);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="background:var(--amber-d);border:1px solid var(--amber-b);padding:4px 12px;border-radius:6px;">📊 Cours complet · 5ème</span>
+    </div>
+    <div class="hero-eyebrow">Programme officiel 5ème</div>
+    <h1>Statistiques<br>&amp; <em>Probabilités</em></h1>
+    <p class="hero-desc">Des effectifs aux fréquences, de la moyenne aux diagrammes — et la découverte fascinante du <strong>hasard et des probabilités</strong>.</p>
+    <div class="obj-row">
+      <div class="obj-chip">📋 Lire un tableau de données</div>
+      <div class="obj-chip">🔢 Calculer une fréquence</div>
+      <div class="obj-chip">📈 Construire un diagramme</div>
+      <div class="obj-chip">🎲 Calculer une probabilité</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══════════════════════════════════════════════
+         BLOC NARRATION + MODE
+    ══════════════════════════════════════════════ -->
+    <div class="g-narration">
+      <div class="g-narration-avatar">🕵️</div>
+      <div>
+        <strong>Mission : Analyste de données</strong><br>
+        Tu incarnes un analyste junior. Chaque section débloque de nouvelles compétences réelles. Lis, explore, réponds aux défis — et regarde ton niveau monter. Le quiz final valide ta mission.
+      </div>
+    </div>
+
+    <!-- Sélecteur de mode -->
+    <div class="g-mode-selector" id="gModeSelector">
+      <div class="g-mode-btn gm-active" data-mode="normal" onclick="gSetMode('normal',this)">
+        <span class="gm-icon">🟡</span>
+        <span class="gm-name">Normal</span>
+        <span class="gm-desc">Cours complet</span>
+      </div>
+      <div class="g-mode-btn" data-mode="easy" onclick="gSetMode('easy',this)">
+        <span class="gm-icon">🟢</span>
+        <span class="gm-name">Guidé</span>
+        <span class="gm-desc">Avec indices</span>
+      </div>
+      <div class="g-mode-btn" data-mode="hard" onclick="gSetMode('hard',this)">
+        <span class="gm-icon">🔴</span>
+        <span class="gm-name">Expert</span>
+        <span class="gm-desc">XP ×2, sans aide</span>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         S1 : EFFECTIFS & FRÉQUENCES
+    ══════════════════════════════════════════════ -->
+    <div class="section" id="s1">
+      <div class="sec-hdr">
+        <div class="sec-n">01</div>
+        <div>
+          <div class="sec-title">Effectifs &amp; Fréquences</div>
+          <div class="sec-sub">Lire, construire et comparer des tableaux</div>
+        </div>
+      </div>
+      <div class="g-objective">Savoir calculer une fréquence et comparer deux populations</div>
+      <div class="card cdef">
+        <p>L'<strong>effectif</strong> d'une valeur est le <strong>nombre de fois</strong> qu'elle apparaît dans la série. La <strong>somme de tous les effectifs</strong> est appelée l'<strong>effectif total</strong>.</p>
+        <p style="margin-top:6px;">La <strong>fréquence</strong> exprime la part de chaque valeur par rapport au total, <strong>en pourcentage</strong> :</p>
+        <div style="text-align:center;margin:14px 0;font-family:'DM Mono';font-size:15px;">
+          <span style="color:var(--sky);">Fréquence (%) =</span>
+          <span style="display:inline-flex;flex-direction:column;align-items:center;margin:0 8px;vertical-align:middle;font-size:14px;">
+            <span style="border-bottom:1.5px solid var(--violet);padding-bottom:2px;color:var(--violet);">Effectif</span>
+            <span style="padding-top:2px;color:var(--teal);">Effectif total</span>
+          </span>
+          <span style="color:var(--sky);">× 100</span>
+        </div>
+      </div>
+      <div class="card cex">
+        <p style="margin-bottom:12px;"><strong>Exemple :</strong> On demande aux élèves d'une classe de 5ᵉ (30 élèves) combien d'heures par jour ils passent à regarder des vidéos en ligne (YouTube, TikTok, Netflix…).</p>
+        <div style="overflow-x:auto;">
+          <table class="stat-table">
+            <thead><tr><th>Temps de visionnage</th><th>Effectif</th><th>Fréquence (%)</th></tr></thead>
+            <tbody>
+              <tr><td>Moins de 30 minutes</td><td>3</td><td class="hi">10 %</td></tr>
+              <tr><td>30 min à 1 heure</td><td>8</td><td class="hi">27 %</td></tr>
+              <tr><td>1 h à 2 heures</td><td>11</td><td class="hi">37 %</td></tr>
+              <tr><td>2 h à 3 heures</td><td>5</td><td class="hi">17 %</td></tr>
+              <tr><td>Plus de 3 heures</td><td>2</td><td class="hi">7 %</td></tr>
+              <tr><td>Ne regarde pas</td><td>1</td><td class="hi">3 %</td></tr>
+              <tr class="total"><td>TOTAL</td><td>30</td><td>100 %</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="steps" style="margin-top:14px;">
+          <div class="sr"><div class="slbl">Calcul type</div><div class="seq">"1 h à 2 heures" : 11 élèves sur 30</div></div>
+          <div class="sr"><div class="slbl">Fréquence</div><div class="seq"><span class="h">11 ÷ 30 × 100 ≈ 36,7</span> → <span class="ok">37 %</span></div></div>
+        </div>
+      </div>
+      <div class="card ctip">
+        <p><strong>Pourquoi utiliser les fréquences ?</strong> Quand deux groupes n'ont pas le même effectif total, on ne peut pas comparer directement les effectifs. Les fréquences permettent de <strong>comparer des proportions</strong> quelle que soit la taille du groupe.</p>
+      </div>
+      <div class="card clife">
+        <p>Dans une enquête nationale sur 2 400 adolescents, 52 % regardent des vidéos plus de 2 heures par jour, contre seulement 23 % dans la classe. Les fréquences permettent cette comparaison malgré des effectifs totaux très différents.</p>
+      </div>
+
+      <!-- ⚡ MINI-DÉFI S1 -->
+      <div class="g-challenge" id="gc-s1">
+        <div class="g-challenge-header">
+          <span class="g-challenge-tag">⚡ Défi — Statistiques</span>
+          <span class="g-challenge-timer" id="gct-s1"></span>
+        </div>
+        <div class="g-challenge-q">Un streamer a 25 abonnés. Lors d'un live, 15 ont regardé jusqu'à la fin. Quelle est la fréquence des spectateurs jusqu'au bout ?</div>
+        <div class="g-challenge-opts">
+          <button class="g-copt" onclick="gChallenge('s1',this,false,'15÷25×100 = 60 %')">40 %</button>
+          <button class="g-copt" onclick="gChallenge('s1',this,true,'15÷25×100 = 60 %')">60 %</button>
+          <button class="g-copt" onclick="gChallenge('s1',this,false,'15÷25×100 = 60 %')">75 %</button>
+          <button class="g-copt" onclick="gChallenge('s1',this,false,'15÷25×100 = 60 %')">55 %</button>
+        </div>
+        <div class="g-challenge-fb" id="gcf-s1"></div>
+        <div class="g-xp-reward">+15 XP en Statistiques si correct</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════════════════════════════════
+         S2 : MOYENNE
+    ══════════════════════════════════════════════ -->
+    <div class="section" id="s2">
+      <div class="sec-hdr">
+        <div class="sec-n">02</div>
+        <div>
+          <div class="sec-title">La Moyenne</div>
+          <div class="sec-sub">Moyenne simple et moyenne pondérée</div>
+        </div>
+      </div>
+      <div class="g-objective">Savoir calculer une moyenne simple et une moyenne pondérée</div>
+      <p style="margin-bottom:6px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">1 — Moyenne simple</p>
+      <div class="card cdef">
+        <p>La <strong>moyenne simple</strong> s'utilise quand chaque valeur n'apparaît <strong>qu'une seule fois</strong>. On additionne toutes les valeurs et on divise par le nombre de valeurs.</p>
+        <div style="text-align:center;margin:10px 0;font-family:'DM Mono';font-size:14px;">
+          <span style="color:var(--violet);">Moyenne =</span>
+          <span style="display:inline-flex;flex-direction:column;align-items:center;margin:0 8px;vertical-align:middle;">
+            <span style="border-bottom:1.5px solid var(--violet);padding-bottom:2px;color:var(--sky);">somme de toutes les valeurs</span>
+            <span style="padding-top:2px;color:var(--teal);">nombre de valeurs</span>
+          </span>
+        </div>
+      </div>
+      <div class="card cex">
+        <p style="margin-bottom:10px;"><strong>Exemple :</strong> Scores d'un joueur lors de ses 7 dernières parties de <em>Rocket League</em> (en points) :</p>
+        <p class="mono" style="text-align:center;margin:10px 0;color:var(--soft);">450 — 620 — 380 — 710 — 530 — 495 — 590</p>
+        <div class="steps">
+          <div class="sr"><div class="slbl">Somme</div><div class="seq"><span class="h">450+620+380+710+530+495+590 = 3 775</span></div></div>
+          <div class="sr"><div class="slbl">Nb de valeurs</div><div class="seq">7 parties</div></div>
+          <div class="sr"><div class="slbl">Moyenne</div><div class="seq"><span class="h">3 775 ÷ 7 ≈</span> <span class="ok">539 points/partie</span></div></div>
+        </div>
+      </div>
+      <p style="margin-bottom:6px;margin-top:22px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">2 — Moyenne pondérée</p>
+      <div class="card cdef">
+        <p>La <strong>moyenne pondérée</strong> s'utilise quand les valeurs apparaissent <strong>plusieurs fois</strong> (tableau d'effectifs). On multiplie chaque valeur par son effectif, on additionne, puis on divise par l'effectif total.</p>
+        <div style="text-align:center;margin:10px 0;font-family:'DM Mono';font-size:13px;">
+          <span style="color:var(--violet);">Moyenne =</span>
+          <span style="display:inline-flex;flex-direction:column;align-items:center;margin:0 8px;vertical-align:middle;">
+            <span style="border-bottom:1.5px solid var(--violet);padding-bottom:2px;color:var(--sky);">(v₁ × n₁) + (v₂ × n₂) + …</span>
+            <span style="padding-top:2px;color:var(--teal);">n₁ + n₂ + …</span>
+          </span>
+        </div>
+      </div>
+      <div class="card cex">
+        <p style="margin-bottom:12px;"><strong>Exemple :</strong> Enquête sur le nombre de buts marqués par match lors d'un tournoi de foot inter-classes (28 matchs).</p>
+        <div style="overflow-x:auto;">
+          <table class="stat-table" style="margin-bottom:14px;">
+            <thead><tr><th>Buts par match</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>Total</th></tr></thead>
+            <tbody>
+              <tr><td>Effectif</td><td>2</td><td>9</td><td>10</td><td>5</td><td>2</td><td class="hi3">28</td></tr>
+              <tr><td style="color:var(--violet);font-size:12px;">val × eff</td><td class="hi">0×2=0</td><td class="hi">1×9=9</td><td class="hi">2×10=20</td><td class="hi">3×5=15</td><td class="hi">4×2=8</td><td class="hi">52</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="steps">
+          <div class="sr"><div class="slbl">Somme pondérée</div><div class="seq"><span class="h">0 + 9 + 20 + 15 + 8 = 52</span></div></div>
+          <div class="sr"><div class="slbl">Effectif total</div><div class="seq">2 + 9 + 10 + 5 + 2 = 28</div></div>
+          <div class="sr"><div class="slbl">Moyenne</div><div class="seq"><span class="h">52 ÷ 28 ≈</span> <span class="ok">1,86 but/match</span></div></div>
+        </div>
+      </div>
+      <div class="card cwarn">
+        <p><strong>Erreur fréquente :</strong> ne pas multiplier chaque valeur par son effectif. Si 10 matchs ont eu 2 buts, la contribution est <strong>2 × 10 = 20</strong>, pas simplement 2.</p>
+      </div>
+
+      <!-- ⚡ MINI-DÉFI S2 -->
+      <div class="g-challenge" id="gc-s2">
+        <div class="g-challenge-header">
+          <span class="g-challenge-tag">🧠 Qui a raison ?</span>
+        </div>
+        <div class="g-challenge-q">Emma joue 5 parties de Mario Kart et obtient les scores : 1 200 — 850 — 1 500 — 1 100 — 1 350. Quelle est sa moyenne ?</div>
+        <div class="g-challenge-opts">
+          <button class="g-copt" onclick="gChallenge('s2',this,true,'(1200+850+1500+1100+1350)÷5 = 6000÷5 = 1 200')">1 200</button>
+          <button class="g-copt" onclick="gChallenge('s2',this,false,'(1200+850+1500+1100+1350)÷5 = 6000÷5 = 1 200')">1 050</button>
+          <button class="g-copt" onclick="gChallenge('s2',this,false,'(1200+850+1500+1100+1350)÷5 = 6000÷5 = 1 200')">1 400</button>
+          <button class="g-copt" onclick="gChallenge('s2',this,false,'(1200+850+1500+1100+1350)÷5 = 6000÷5 = 1 200')">950</button>
+        </div>
+        <div class="g-challenge-fb" id="gcf-s2"></div>
+        <div class="g-xp-reward">+15 XP en Statistiques si correct</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════════════════════════════════
+         S3 : DIAGRAMMES (bâtons + circulaire interactif)
+    ══════════════════════════════════════════════ -->
+    <div class="section" id="s3">
+      <div class="sec-hdr">
+        <div class="sec-n">03</div>
+        <div>
+          <div class="sec-title">Représentations graphiques</div>
+          <div class="sec-sub">Diagramme en bâtons et diagramme circulaire interactif</div>
+        </div>
+      </div>
+      <div class="g-objective">Construire un diagramme en bâtons et calculer les angles d'un camembert</div>
+
+      <!-- ─── 1. Bâtons ─── -->
+      <p style="margin-bottom:6px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">1 — Diagramme en bâtons</p>
+      <div class="card cdef">
+        <p>Le <strong>diagramme en bâtons</strong> représente des données à l'aide de barres verticales. La <strong>hauteur de chaque barre</strong> correspond à l'effectif (ou la fréquence) de la valeur.</p>
+        <p style="margin-top:4px;font-size:13px;color:var(--muted);">Utilisé pour des données <strong>numériques discrètes</strong> ou des catégories.</p>
+      </div>
+      <div style="background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:14px 0;">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:'DM Mono';">Consoles de jeux préférées des élèves d'une classe (28 élèves)</p>
+        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;display:block;margin:0 auto;">
+          <line x1="50" y1="10" x2="50" y2="160" stroke="var(--border)" stroke-width="1"/>
+          <line x1="50" y1="160" x2="390" y2="160" stroke="var(--border)" stroke-width="1"/>
+          <line x1="48" y1="50"  x2="390" y2="50"  stroke="var(--border)" stroke-width="0.5" stroke-dasharray="4,4"/>
+          <line x1="48" y1="90"  x2="390" y2="90"  stroke="var(--border)" stroke-width="0.5" stroke-dasharray="4,4"/>
+          <line x1="48" y1="130" x2="390" y2="130" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="4,4"/>
+          <text x="44" y="163" text-anchor="end" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">0</text>
+          <text x="44" y="133" text-anchor="end" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">3</text>
+          <text x="44" y="93"  text-anchor="end" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">7</text>
+          <text x="44" y="53"  text-anchor="end" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">10</text>
+          <rect x="70"  y="10"  width="50" height="150" rx="4" fill="rgba(63,255,210,0.25)"  stroke="var(--teal)"   stroke-width="1.5"/>
+          <rect x="170" y="45"  width="50" height="115" rx="4" fill="rgba(160,125,255,0.25)" stroke="var(--violet)" stroke-width="1.5"/>
+          <rect x="270" y="114" width="50" height="46"  rx="4" fill="rgba(255,190,61,0.25)"  stroke="var(--amber)"  stroke-width="1.5"/>
+          <rect x="340" y="149" width="40" height="11"  rx="4" fill="rgba(255,107,138,0.25)" stroke="var(--rose)"   stroke-width="1.5"/>
+          <text x="95"  y="6"   text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--teal);font-weight:700;">13</text>
+          <text x="195" y="41"  text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--violet);font-weight:700;">10</text>
+          <text x="295" y="110" text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--amber);font-weight:700;">4</text>
+          <text x="360" y="145" text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--rose);font-weight:700;">1</text>
+          <text x="95"  y="175" text-anchor="middle" style="font-family:'DM Mono';font-size:11px;fill:var(--teal);">Switch</text>
+          <text x="195" y="175" text-anchor="middle" style="font-family:'DM Mono';font-size:11px;fill:var(--violet);">PS5</text>
+          <text x="295" y="175" text-anchor="middle" style="font-family:'DM Mono';font-size:11px;fill:var(--amber);">Xbox</text>
+          <text x="360" y="175" text-anchor="middle" style="font-family:'DM Mono';font-size:11px;fill:var(--rose);">PC</text>
+          <text x="220" y="195" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">Console préférée</text>
+          <text x="14" y="85" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);" transform="rotate(-90,14,85)">Effectif</text>
+        </svg>
+      </div>
+      <div class="card cmet">
+        <p style="margin-bottom:8px;"><strong>Méthode — Construire un diagramme en bâtons :</strong></p>
+        <ul class="cl">
+          <li><span class="cn">1</span><span>Tracer deux axes (horizontal : valeurs ou catégories ; vertical : effectifs).</span></li>
+          <li><span class="cn">2</span><span>Choisir une <strong>échelle régulière</strong> pour l'axe vertical.</span></li>
+          <li><span class="cn">3</span><span>Tracer des barres de même largeur, dont la hauteur correspond à chaque effectif.</span></li>
+          <li><span class="cn">4</span><span>Nommer les axes et donner un <strong>titre</strong> au diagramme.</span></li>
+        </ul>
+      </div>
+
+      <!-- ─── 2. Diagramme circulaire interactif ─── -->
+      <p style="margin-bottom:6px;margin-top:30px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">2 — Diagramme circulaire (camembert) interactif</p>
+
+      <div class="card cdef">
+        <p>Le <strong>diagramme circulaire</strong> représente les données par des <strong>secteurs angulaires</strong>. Chaque secteur est proportionnel à la fréquence. Le disque entier représente 100 % soit <strong>360°</strong>.</p>
+      </div>
+
+      <!-- Formule -->
+      <div class="pie-formula-box">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Formule fondamentale</div>
+        <span class="pfhl" style="color:var(--violet);font-weight:600;">Angle (°)</span> =
+        <span class="pie-formula-frac">
+          <span class="pfn">Effectif de la catégorie</span>
+          <span class="pfd">Effectif total</span>
+        </span>
+        × 360°
+      </div>
+
+      <!-- Méthode en 4 étapes -->
+      <div class="card cmet">
+        <p style="margin-bottom:10px;"><strong>Méthode en 4 étapes :</strong></p>
+        <div class="build-steps">
+          <div class="build-step"><div class="bs-n">1</div><div class="bs-text"><strong>Calculer le total</strong><br>Somme des effectifs</div></div>
+          <div class="build-step"><div class="bs-n">2</div><div class="bs-text"><strong>Coefficient</strong><br>360 ÷ effectif total</div></div>
+          <div class="build-step"><div class="bs-n">3</div><div class="bs-text"><strong>Chaque angle</strong><br>Effectif × coefficient</div></div>
+          <div class="build-step"><div class="bs-n">4</div><div class="bs-text"><strong>Vérifier</strong><br>Σ angles = 360°</div></div>
+        </div>
+      </div>
+
+      <!-- Tableau de données généré par JS -->
+      <p style="margin:18px 0 6px;font-size:14px;">Une enquête menée auprès de <strong>40 élèves</strong> porte sur leur <strong>genre musical préféré</strong> :</p>
+      <div style="overflow-x:auto;">
+        <table class="pie-data-table" id="pieDataTable">
+          <thead>
+            <tr><th>Activité</th><th>Effectif</th><th>Fréquence (%)</th><th>Angle (°)</th></tr>
+          </thead>
+          <tbody id="pieDataTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="steps">
+        <div class="sr"><div class="slbl">Effectif total</div><div class="seq"><span class="h">16+7+11+4+2 = 40</span></div></div>
+        <div class="sr"><div class="slbl">Coefficient</div><div class="seq"><span class="h">360 ÷ 40 = 9</span></div></div>
+        <div class="sr"><div class="slbl">Ex. Rap/Hip-hop</div><div class="seq"><span class="h">16 × 9 =</span> <span class="ok">144°</span></div></div>
+        <div class="sr"><div class="slbl">Vérification</div><div class="seq"><span class="ok">144+63+99+36+18 = 360° ✓</span></div></div>
+      </div>
+
+      <!-- Panel info (apparaît au clic) -->
+      <div class="pie-info-panel" id="pieInfoPanel">
+        <div class="pip-title" id="pipTitle">—</div>
+        <div class="pip-row"><span class="pip-key">Effectif :</span><span class="pip-val" id="pipEff">—</span></div>
+        <div class="pip-row"><span class="pip-key">Fréquence :</span><span class="pip-val" id="pipFreq">—</span></div>
+        <div class="pip-row"><span class="pip-key">Calcul de l'angle :</span><span class="pip-val pip-accent" id="pipCalc">—</span></div>
+        <div class="pip-row"><span class="pip-key">Angle :</span><span class="pip-val" id="pipAngle">—</span></div>
+      </div>
+
+      <!-- Diagramme + Légende -->
+      <div class="pie-main-grid">
+        <div>
+          <div class="pie-svg-wrap" id="pieSvgWrap">
+            <svg id="pieSvg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="pie-donut-hole" id="pieDonutHole">
+              <div class="pdh-val" id="pdhVal">40</div>
+              <div class="pdh-lbl">élèves</div>
+            </div>
+          </div>
+          <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:10px;">👆 Clique sur un secteur pour voir le calcul</p>
+        </div>
+        <div class="pie-legend" id="pieLegend"></div>
+      </div>
+
+      <div class="card ctip">
+        <p><strong>Astuce :</strong> Vérifie toujours que la <strong>somme des angles = 360°</strong>. En cas d'écart dû aux arrondis (359° ou 361°), ajuste le secteur le plus grand d'un degré.</p>
+      </div>
+
+      <!-- ⚡ MINI-DÉFI S3 — Trouve l'erreur -->
+      <div class="g-challenge" id="gc-s3">
+        <div class="g-challenge-header">
+          <span class="g-challenge-tag">❌ Trouve l'erreur</span>
+        </div>
+        <div class="g-challenge-q">Un élève calcule l'angle pour 15 élèves sur 60 : il écrit "15 × 60 = 900°". Quelle est l'erreur ?</div>
+        <div class="g-challenge-opts">
+          <button class="g-copt" onclick="gChallenge('s3',this,false,'Il faut ÷ par 60')">Il fallait faire 15 ÷ 360</button>
+          <button class="g-copt" onclick="gChallenge('s3',this,true,'Il faut ÷ par 60')">Il fallait faire (15 ÷ 60) × 360</button>
+          <button class="g-copt" onclick="gChallenge('s3',this,false,'Il faut ÷ par 60')">Il fallait faire 15 × 100</button>
+          <button class="g-copt" onclick="gChallenge('s3',this,false,'Il faut ÷ par 60')">Il n'y a pas d'erreur</button>
+        </div>
+        <div class="g-challenge-fb" id="gcf-s3"></div>
+        <div class="g-xp-reward">+15 XP en Diagrammes si correct</div>
+      </div>
+
+      <!-- ─── EXERCICES DU CAMEMBERT ─── -->
+      <p style="margin:30px 0 6px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">Exercices — Diagramme circulaire</p>
+
+      <!-- EXO PIE 1 : Moyens de transport -->
+      <div class="pie-exblk">
+        <div class="pie-exhdr">
+          <div class="pie-extitle">Exercice A — Moyens de transport</div>
+          <div class="badge beasy">Facile</div>
+        </div>
+        <div class="pie-exbody">
+          <p style="margin-bottom:12px;font-size:14.5px;line-height:1.6;">Une enquête menée auprès de <strong>60 jeunes</strong> porte sur leur plateforme de streaming musicale préférée.</p>
+          <div style="overflow-x:auto;margin:14px 0;">
+            <table class="pie-data-table">
+              <thead><tr><th>Plateforme</th><th>Effectif</th><th>Fréquence (%)</th><th>Angle (°)</th></tr></thead>
+              <tbody>
+                <tr><td>🎵 Spotify</td><td>24</td><td id="pef1" style="color:var(--teal);font-weight:700;">—</td><td id="pea1" style="color:var(--violet);font-weight:700;">—</td></tr>
+                <tr><td>📱 Apple Music</td><td>12</td><td id="pef2" style="color:var(--teal);font-weight:700;">—</td><td id="pea2" style="color:var(--violet);font-weight:700;">—</td></tr>
+                <tr><td>▶️ YouTube Music</td><td>18</td><td id="pef3" style="color:var(--teal);font-weight:700;">—</td><td id="pea3" style="color:var(--violet);font-weight:700;">—</td></tr>
+                <tr><td>🎶 Deezer</td><td>6</td><td id="pef4" style="color:var(--teal);font-weight:700;">—</td><td id="pea4" style="color:var(--violet);font-weight:700;">—</td></tr>
+                <tr class="pie-total"><td>TOTAL</td><td>60</td><td>100 %</td><td>360°</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="pie-exol">
+            <li><span class="pie-exnum">a</span><span>Calcule la fréquence (%) de chaque plateforme.</span></li>
+            <li><span class="pie-exnum">b</span><span>Calcule l'angle de chaque secteur. (Coefficient = 360 ÷ 60 = <strong>6</strong>)</span></li>
+            <li><span class="pie-exnum">c</span><span>Quelle plateforme est la plus utilisée ? Quel pourcentage ?</span></li>
+          </ul>
+          <button class="pie-corrBtn" onclick="tglPie('pcorr1');fillPieExo1()">▶ Voir la correction</button>
+          <div class="pie-corrPanel" id="pcorr1">
+            <div style="font-size:11px;color:var(--violet);margin-bottom:6px;">Coefficient : 360 ÷ 60 = 6</div>
+            <div class="pie-cr"><span class="pie-ck">Spotify</span><span class="pie-ce">24/60×100 = <span class="pie-cv-ok">40 %</span> — Angle : 24×6 = <span class="pie-cv-ok">144°</span></span></div>
+            <div class="pie-cr"><span class="pie-ck">Apple Music</span><span class="pie-ce">12/60×100 = <span class="pie-cv-ok">20 %</span> — Angle : 12×6 = <span class="pie-cv-ok">72°</span></span></div>
+            <div class="pie-cr"><span class="pie-ck">YouTube Music</span><span class="pie-ce">18/60×100 = <span class="pie-cv-ok">30 %</span> — Angle : 18×6 = <span class="pie-cv-ok">108°</span></span></div>
+            <div class="pie-cr"><span class="pie-ck">Deezer</span><span class="pie-ce">6/60×100 = <span class="pie-cv-ok">10 %</span> — Angle : 6×6 = <span class="pie-cv-ok">36°</span></span></div>
+            <div class="pie-cr" style="margin-top:8px;"><span class="pie-ck">Vérification</span><span class="pie-cv-ok">144+72+108+36 = 360° ✓</span></div>
+            <div class="pie-cr"><span class="pie-ck">c) Dominant</span><span class="pie-cv-ok">Spotify — 40 %</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXO PIE 2 : Écrans interactif -->
+      <div class="pie-exblk">
+        <div class="pie-exhdr">
+          <div class="pie-extitle">Exercice B — Temps sur les écrans (interactif)</div>
+          <div class="badge bmid">Intermédiaire</div>
+        </div>
+        <div class="pie-exbody">
+          <p style="font-size:14.5px;line-height:1.6;margin-bottom:8px;">Complète le tableau en calculant les angles. Coefficient : 360 ÷ 50 = <strong>7,2</strong></p>
+          <div style="overflow-x:auto;margin:14px 0;">
+            <table class="pie-data-table" id="pieExo2Table">
+              <thead><tr><th>Sport pratiqué</th><th>Effectif</th><th>Fréquence (%)</th><th>Angle — à compléter</th></tr></thead>
+              <tbody>
+                <tr data-ans="144"><td>⚽ Football</td><td>20</td><td style="color:var(--teal);font-weight:700;">40 %</td><td><input type="number" class="pie-input" placeholder="?" min="0" max="360"></td></tr>
+                <tr data-ans="108"><td>🏊 Natation</td><td>15</td><td style="color:var(--teal);font-weight:700;">30 %</td><td><input type="number" class="pie-input" placeholder="?" min="0" max="360"></td></tr>
+                <tr data-ans="72"><td>🎾 Tennis</td><td>10</td><td style="color:var(--teal);font-weight:700;">20 %</td><td><input type="number" class="pie-input" placeholder="?" min="0" max="360"></td></tr>
+                <tr data-ans="36"><td>🚴 Cyclisme</td><td>5</td><td style="color:var(--teal);font-weight:700;">10 %</td><td><input type="number" class="pie-input" placeholder="?" min="0" max="360"></td></tr>
+                <tr class="pie-total"><td>TOTAL</td><td>50</td><td>100 %</td><td>360°</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="pie-check-btn" onclick="checkPieExo2()">✓ Vérifier mes réponses</button>
+          <div class="pie-fb" id="pieFb2"></div>
+          <button class="pie-corrBtn" onclick="tglPie('pcorr2')" style="margin-top:10px;">▶ Voir la correction complète</button>
+          <div class="pie-corrPanel" id="pcorr2">
+            <div class="pie-cr"><span class="pie-ck">Football</span><span class="pie-ce">20 × 7,2 = <span class="pie-cv-ok">144°</span></span></div>
+            <div class="pie-cr"><span class="pie-ck">Natation</span><span class="pie-ce">15 × 7,2 = <span class="pie-cv-ok">108°</span></span></div>
+            <div class="pie-cr"><span class="pie-ck">Tennis</span><span class="pie-ce">10 × 7,2 = <span class="pie-cv-ok">72°</span></span></div>
+            <div class="pie-cr"><span class="pie-ck">Cyclisme</span><span class="pie-ce">5 × 7,2 = <span class="pie-cv-ok">36°</span></span></div>
+            <div class="pie-cr" style="margin-top:8px;"><span class="pie-ck">Vérification</span><span class="pie-cv-ok">144+108+72+36 = 360° ✓</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXO PIE 3 : Lecture inverse avec mini camembert -->
+      <div class="pie-exblk">
+        <div class="pie-exhdr">
+          <div class="pie-extitle">Exercice C — Lecture et interprétation</div>
+          <div class="badge bhard">Difficile</div>
+        </div>
+        <div class="pie-exbody">
+          <p style="font-size:14.5px;line-height:1.6;margin-bottom:14px;">Voici un diagramme circulaire représentant les genres de jeux vidéo préférés de <strong>80 joueurs</strong>. Les angles sont indiqués. Réponds aux questions.</p>
+          <div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;margin:16px 0;">
+            <div style="position:relative;width:180px;height:180px;flex-shrink:0;">
+              <svg viewBox="0 0 180 180" style="width:100%;height:100%;filter:drop-shadow(0 4px 14px rgba(0,0,0,0.18));" id="pieExo3Svg"></svg>
+            </div>
+            <div style="flex:1;min-width:180px;">
+              <p style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">Légende</p>
+              <div id="pieExo3Legend" style="display:flex;flex-direction:column;gap:8px;"></div>
+            </div>
+          </div>
+          <ul class="pie-exol">
+            <li><span class="pie-exnum">a</span><span>Quel sport est le plus pratiqué ? Quel est son angle ?</span></li>
+            <li><span class="pie-exnum">b</span><span>Calcule l'effectif correspondant au Basket (angle = 108°), total = 80 élèves.</span></li>
+            <li><span class="pie-exnum">c</span><span>Le Foot et la Natation représentent-ils ensemble plus de la moitié des élèves ? Justifie.</span></li>
+          </ul>
+          <button class="pie-corrBtn" onclick="tglPie('pcorr3')">▶ Voir la correction</button>
+          <div class="pie-corrPanel" id="pcorr3">
+            <div class="pie-cr"><span class="pie-ck">a) Dominant</span><span class="pie-cv-ok">Football — 144° (plus grand secteur)</span></div>
+            <div class="pie-cr"><span class="pie-ck">b) Basket</span><span class="pie-ce">(108 ÷ 360) × 80 = <span class="pie-cv-ok">24 élèves</span></span></div>
+            <div class="pie-cr"><span class="pie-ck">c) Foot+Natation</span><span class="pie-ce">144°+72°=216° > 180° → <span class="pie-cv-ok">Oui, plus de 50 % (60 %)</span></span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- fin S3 -->
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════════════════════════════════
+         S4 : EXPÉRIENCE ALÉATOIRE
+    ══════════════════════════════════════════════ -->
+    <div class="section" id="s4">
+      <div class="sec-hdr">
+        <div class="sec-n">04</div>
+        <div>
+          <div class="sec-title">Expérience aléatoire</div>
+          <div class="sec-sub">Hasard, issues, événements</div>
+        </div>
+      </div>
+      <div class="g-objective">Identifier une expérience aléatoire et lister ses issues</div>
+      <div class="card cdef">
+        <p>Une <strong>expérience aléatoire</strong> est une expérience dont le résultat n'est <strong>pas prévisible à l'avance</strong>, même si on connaît tous les résultats possibles.</p>
+        <ul class="al" style="margin-top:10px;">
+          <li>Lancer un dé → résultat inconnu, mais on sait que c'est entre 1 et 6.</li>
+          <li>Tirer une carte d'un jeu → résultat inconnu, mais on connaît le jeu.</li>
+          <li>Tirer une boule d'un sac → couleur inconnue, mais on connaît le contenu.</li>
+        </ul>
+        <p style="margin-top:10px;">Les résultats possibles sont appelés les <strong>issues</strong> de l'expérience. Un <strong>événement</strong> est un ensemble d'une ou plusieurs issues.</p>
+      </div>
+      <div class="card cex">
+        <p style="margin-bottom:12px;"><strong>Exemple :</strong> Léo écrit les 13 lettres du mot <strong>MATHÉMATIQUES</strong> sur 13 cartes identiques, puis Théo en tire une au hasard.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin:14px 0;justify-content:center;">
+          <span style="background:var(--violet-d);border:1px solid var(--violet-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--violet);">M</span>
+          <span style="background:var(--teal-d);border:1px solid var(--teal-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--teal);">A</span>
+          <span style="background:var(--amber-d);border:1px solid var(--amber-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--amber);">T</span>
+          <span style="background:var(--sky-d);border:1px solid var(--sky-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--sky);">H</span>
+          <span style="background:var(--teal-d);border:1px solid var(--teal-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--teal);">E</span>
+          <span style="background:var(--violet-d);border:1px solid var(--violet-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--violet);">M</span>
+          <span style="background:var(--teal-d);border:1px solid var(--teal-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--teal);">A</span>
+          <span style="background:var(--amber-d);border:1px solid var(--amber-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--amber);">T</span>
+          <span style="background:var(--sky-d);border:1px solid var(--sky-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--sky);">I</span>
+          <span style="background:var(--sky-d);border:1px solid var(--sky-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--sky);">Q</span>
+          <span style="background:var(--sky-d);border:1px solid var(--sky-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--sky);">U</span>
+          <span style="background:var(--teal-d);border:1px solid var(--teal-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--teal);">E</span>
+          <span style="background:var(--sky-d);border:1px solid var(--sky-b);border-radius:6px;padding:7px 10px;font-family:'DM Mono';font-size:16px;font-weight:700;color:var(--sky);">S</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+          <div class="steps" style="margin:0;">
+            <div class="sr"><div class="slbl">Issues</div><div class="seq">13 cartes = 13 issues</div></div>
+            <div class="sr"><div class="slbl">Lettres ×2</div><div class="seq"><span class="h">M, A, T, E</span></div></div>
+            <div class="sr"><div class="slbl">Voyelles</div><div class="seq">2A, 2E, I, U = <span class="ok">6</span></div></div>
+          </div>
+          <div class="steps" style="margin:0;">
+            <div class="sr"><div class="slbl">Consonnes</div><div class="seq">2M, 2T, H, Q, S = <span class="ok">7</span></div></div>
+            <div class="sr"><div class="slbl">Prénom Théo</div><div class="seq">2T, H, 2E = <span class="h">5 cartes</span></div></div>
+            <div class="sr"><div class="slbl">+ d'une sur 2 ?</div><div class="seq"><span class="ok">5 &lt; 6,5</span> → <span style="color:var(--rose);">Non !</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card chist">
+        <p>Le hasard fascine les mathématiciens depuis des siècles. Au XVIIᵉ siècle, Blaise Pascal et Pierre de Fermat ont posé les bases du calcul des probabilités en cherchant à résoudre des problèmes de jeux de dés.</p>
+      </div>
+
+      <!-- ⚡ MINI-DÉFI S4 -->
+      <div class="g-challenge" id="gc-s4">
+        <div class="g-challenge-header">
+          <span class="g-challenge-tag">🎮 Défi — Hasard</span>
+        </div>
+        <div class="g-challenge-q">Un joueur lance un dé à 6 faces. Combien y a-t-il d'issues possibles ?</div>
+        <div class="g-challenge-opts">
+          <button class="g-copt" onclick="gChallenge('s4',this,false,'6 issues')">3</button>
+          <button class="g-copt" onclick="gChallenge('s4',this,true,'6 issues')">6</button>
+          <button class="g-copt" onclick="gChallenge('s4',this,false,'6 issues')">12</button>
+          <button class="g-copt" onclick="gChallenge('s4',this,false,'6 issues')">∞</button>
+        </div>
+        <div class="g-challenge-fb" id="gcf-s4"></div>
+        <div class="g-xp-reward">+15 XP en Probabilités si correct</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════════════════════════════════
+         S5 : PROBABILITÉS
+    ══════════════════════════════════════════════ -->
+    <div class="section" id="s5">
+      <div class="sec-hdr">
+        <div class="sec-n">05</div>
+        <div>
+          <div class="sec-title">Calcul de probabilités</div>
+          <div class="sec-sub">Définition, formule, équiprobabilité</div>
+        </div>
+      </div>
+      <div class="g-objective">Calculer une probabilité avec la formule P = favorables ÷ total</div>
+      <div class="card cdef">
+        <p>La <strong>probabilité</strong> d'un événement mesure sa <strong>chance de se réaliser</strong>. Pour une expérience où toutes les issues sont <strong>également possibles</strong> (équiprobabilité) :</p>
+        <div style="text-align:center;margin:14px 0;font-family:'DM Mono';font-size:15px;">
+          <span style="color:var(--violet);">P(événement) =</span>
+          <span style="display:inline-flex;flex-direction:column;align-items:center;margin:0 8px;vertical-align:middle;">
+            <span style="border-bottom:1.5px solid var(--violet);padding-bottom:2px;color:var(--teal);">nombre d'issues favorables</span>
+            <span style="padding-top:2px;color:var(--sky);">nombre total d'issues</span>
+          </span>
+        </div>
+        <p style="margin-top:8px;font-family:'DM Mono';font-size:12px;color:var(--muted);">Une probabilité est toujours comprise entre 0 et 1 (ou entre 0 % et 100 %).</p>
+        <div style="display:flex;gap:14px;margin-top:12px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:140px;text-align:center;padding:10px;background:var(--s1);border-radius:8px;border:1px solid var(--border);">
+            <div style="font-family:'DM Mono';font-size:20px;color:var(--rose);font-weight:700;">0</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Événement impossible</div>
+          </div>
+          <div style="flex:2;min-width:140px;text-align:center;padding:10px;background:var(--s1);border-radius:8px;border:1px solid var(--border);">
+            <div style="font-family:'DM Mono';font-size:20px;color:var(--violet);font-weight:700;">0 &lt; p &lt; 1</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Événement possible</div>
+          </div>
+          <div style="flex:1;min-width:140px;text-align:center;padding:10px;background:var(--s1);border-radius:8px;border:1px solid var(--border);">
+            <div style="font-family:'DM Mono';font-size:20px;color:var(--teal);font-weight:700;">1</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Événement certain</div>
+          </div>
+        </div>
+      </div>
+      <div class="card cex">
+        <p style="margin-bottom:14px;"><strong>Trois situations types :</strong></p>
+        <p style="font-size:12px;font-weight:700;color:var(--sky);margin-bottom:6px;font-family:'DM Mono';">a) Dé à 6 faces — obtenir le 2</p>
+        <div class="steps" style="margin-bottom:14px;">
+          <div class="sr"><div class="slbl">Issues favora.</div><div class="seq"><span class="h">1</span> (uniquement le « 2 »)</div></div>
+          <div class="sr"><div class="slbl">Total issues</div><div class="seq">6 faces</div></div>
+          <div class="sr"><div class="slbl">Probabilité</div><div class="seq"><span class="ok">P = 1/6 ≈ 16,7 %</span></div></div>
+        </div>
+        <div class="prob-bar"><div class="prob-fill" style="width:16.7%;background:var(--sky);">1/6</div></div>
+        <p style="font-size:12px;font-weight:700;color:var(--teal);margin:14px 0 6px;font-family:'DM Mono';">b) Urne avec 3 boules vertes et 4 boules jaunes — tirer une boule verte</p>
+        <div class="balls-row">
+          <div class="ball ball-g">V</div><div class="ball ball-g">V</div><div class="ball ball-g">V</div>
+          <div class="ball ball-y">J</div><div class="ball ball-y">J</div><div class="ball ball-y">J</div><div class="ball ball-y">J</div>
+        </div>
+        <div class="steps" style="margin-bottom:10px;">
+          <div class="sr"><div class="slbl">Issues favora.</div><div class="seq"><span class="h">3</span> boules vertes</div></div>
+          <div class="sr"><div class="slbl">Total issues</div><div class="seq">3 + 4 = 7 boules</div></div>
+          <div class="sr"><div class="slbl">Probabilité</div><div class="seq"><span class="ok">P = 3/7 ≈ 42,9 %</span></div></div>
+        </div>
+        <div class="prob-bar"><div class="prob-fill" style="width:42.9%;background:var(--teal);">3/7</div></div>
+        <p style="font-size:12px;font-weight:700;color:var(--amber);margin:14px 0 6px;font-family:'DM Mono';">c) Roue à 14 secteurs égaux, dont 2 jaunes — tomber sur jaune</p>
+        <div class="steps" style="margin-bottom:10px;">
+          <div class="sr"><div class="slbl">Issues favora.</div><div class="seq"><span class="h">2</span> secteurs jaunes</div></div>
+          <div class="sr"><div class="slbl">Total issues</div><div class="seq">14 secteurs</div></div>
+          <div class="sr"><div class="slbl">Probabilité</div><div class="seq"><span class="ok">P = 2/14 = 1/7 ≈ 14,3 %</span></div></div>
+        </div>
+        <div class="prob-bar"><div class="prob-fill" style="width:14.3%;background:var(--amber);">1/7</div></div>
+      </div>
+      <div class="card cwarn">
+        <p><strong>Condition importante :</strong> la formule P = (issues favorables) / (issues totales) n'est valable que si toutes les issues sont <strong>également probables</strong> (équiprobabilité).</p>
+      </div>
+
+      <!-- ⚡ MINI-DÉFI S5 -->
+      <div class="g-challenge" id="gc-s5">
+        <div class="g-challenge-header">
+          <span class="g-challenge-tag">🎲 Défi — Probabilités</span>
+        </div>
+        <div class="g-challenge-q">Un sac contient 4 billes rouges et 6 billes bleues. Quelle est la probabilité de tirer une bille rouge ?</div>
+        <div class="g-challenge-opts">
+          <button class="g-copt" onclick="gChallenge('s5',this,false,'4/10')">1/4</button>
+          <button class="g-copt" onclick="gChallenge('s5',this,true,'4/10')">4/10 = 2/5</button>
+          <button class="g-copt" onclick="gChallenge('s5',this,false,'4/10')">6/10</button>
+          <button class="g-copt" onclick="gChallenge('s5',this,false,'4/10')">4/6</button>
+        </div>
+        <div class="g-challenge-fb" id="gcf-s5"></div>
+        <div class="g-xp-reward">+15 XP en Probabilités si correct</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════════════════════════════════
+         S6 : EXERCICES GÉNÉRAUX
+    ══════════════════════════════════════════════ -->
+    <div class="section" id="s6">
+      <div class="sec-hdr">
+        <div class="sec-n">06</div>
+        <div>
+          <div class="sec-title">Exercices généraux</div>
+          <div class="sec-sub">Effectifs, fréquences, moyennes, probabilités</div>
+        </div>
+      </div>
+      <div class="g-objective">Appliquer toutes les notions du cours sur des cas concrets</div>
+
+      <!-- EX 1 -->
+      <div class="exblk">
+        <div class="exhdr"><div class="extitle">Exercice 1 — Effectifs et fréquences</div><div class="badge beasy">Facile</div></div>
+        <div class="exbody">
+          <p style="margin-bottom:12px;">Le tableau présente le nombre de spectateurs dans une salle de cinéma (300 places) chaque jour de la semaine.</p>
+          <div style="overflow-x:auto;margin-bottom:12px;">
+            <table class="stat-table">
+              <thead><tr><th>Jour</th><th>Lundi</th><th>Mardi</th><th>Mercredi</th><th>Jeudi</th><th>Vendredi</th><th>Samedi</th><th>Dimanche</th><th>Total</th></tr></thead>
+              <tbody>
+                <tr><td>Effectif</td><td>120</td><td>150</td><td>270</td><td>240</td><td>300</td><td>300</td><td>280</td><td class="hi3">?</td></tr>
+                <tr><td>Fréquence (%)</td><td class="hi">?</td><td class="hi">?</td><td class="hi">?</td><td class="hi">?</td><td class="hi">?</td><td class="hi">?</td><td class="hi">?</td><td>100 %</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="exol">
+            <li><span class="exnum">a</span><span>Calcule l'effectif total.</span></li>
+            <li><span class="exnum">b</span><span>Complète la ligne des fréquences en % (arrondir à 0,1 % près).</span></li>
+            <li><span class="exnum">c</span><span>Quel jour la salle est-elle la plus remplie ?</span></li>
+          </ul>
+          <button class="corrBtn" onclick="tgl('c1')">▶ Voir la correction</button>
+          <div class="corrPanel" id="c1">
+            <div class="cl2"><span class="cn2">a) Total</span><span class="ce">120+150+270+240+300+300+280 = <strong style="color:var(--teal);">1 660</strong></span></div>
+            <div class="cl2"><span class="cn2">b) Fréquences</span><span class="ce">Lu : 7,2 % | Ma : 9,0 % | Me : 16,3 % | Je : 14,5 % | Ve : 18,1 % | Sa : 18,1 % | Di : 16,9 %</span></div>
+            <div class="cl2"><span class="cn2">c) Remplissage</span><span class="ce">Vendredi et Samedi : 300/300 = <strong style="color:var(--teal);">100 %</strong> (salle pleine !)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 2 -->
+      <div class="exblk">
+        <div class="exhdr"><div class="extitle">Exercice 2 — Calcul de moyennes</div><div class="badge bmid">Intermédiaire</div></div>
+        <div class="exbody">
+          <p style="margin-bottom:12px;">Notes de maths au T1 : <span class="mono" style="color:var(--soft);">14 — 8 — 17 — 11 — 15 — 9 — 13</span></p>
+          <p style="margin-bottom:6px;">Résultats d'un questionnaire sur le nombre de frères et sœurs (27 élèves) :</p>
+          <div style="overflow-x:auto;margin-bottom:12px;">
+            <table class="stat-table">
+              <thead><tr><th>Nb frères/sœurs</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
+              <tbody><tr><td>Effectif</td><td>5</td><td>10</td><td>8</td><td>3</td><td>1</td></tr></tbody>
+            </table>
+          </div>
+          <ul class="exol">
+            <li><span class="exnum">a</span><span>Calcule la moyenne simple des notes.</span></li>
+            <li><span class="exnum">b</span><span>Calcule la moyenne pondérée du nombre de frères et sœurs.</span></li>
+            <li><span class="exnum">c</span><span>Interprète le résultat de b) en une phrase.</span></li>
+          </ul>
+          <button class="corrBtn" onclick="tgl('c2')">▶ Voir la correction</button>
+          <div class="corrPanel" id="c2">
+            <div class="cl2"><span class="cn2">a)</span><span class="ce">(14+8+17+11+15+9+13) ÷ 7 = 87 ÷ 7 ≈ <strong style="color:var(--teal);">12,4</strong></span></div>
+            <div class="cl2"><span class="cn2">b) Somme</span><span class="ce">0×5+1×10+2×8+3×3+4×1 = 39 ; Moy = 39 ÷ 27 ≈ <strong style="color:var(--teal);">1,44</strong></span></div>
+            <div class="cl2"><span class="cn2">c)</span><span class="ce">En moyenne, chaque élève a environ 1,44 frère ou sœur.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 3 -->
+      <div class="exblk">
+        <div class="exhdr"><div class="extitle">Exercice 3 — Probabilités</div><div class="badge bmid">Intermédiaire</div></div>
+        <div class="exbody">
+          <p style="margin-bottom:12px;">Un sac contient : <strong style="color:var(--teal);">5 boules vertes</strong>, <strong style="color:var(--rose);">3 rouges</strong> et <strong style="color:var(--sky);">2 bleues</strong>. On tire une boule au hasard.</p>
+          <div class="balls-row" style="margin-bottom:14px;">
+            <div class="ball ball-g">V</div><div class="ball ball-g">V</div><div class="ball ball-g">V</div><div class="ball ball-g">V</div><div class="ball ball-g">V</div>
+            <div class="ball ball-r">R</div><div class="ball ball-r">R</div><div class="ball ball-r">R</div>
+            <div class="ball ball-b">B</div><div class="ball ball-b">B</div>
+          </div>
+          <ul class="exol">
+            <li><span class="exnum">a</span><span>Combien y a-t-il d'issues possibles au total ?</span></li>
+            <li><span class="exnum">b</span><span>P(boule verte) = ?</span></li>
+            <li><span class="exnum">c</span><span>P(boule rouge) = ?</span></li>
+            <li><span class="exnum">d</span><span>P(NON bleue) = ?</span></li>
+          </ul>
+          <button class="corrBtn" onclick="tgl('c3')">▶ Voir la correction</button>
+          <div class="corrPanel" id="c3">
+            <div class="cl2"><span class="cn2">a)</span><span class="ce">5+3+2 = <strong style="color:var(--teal);">10 issues</strong></span></div>
+            <div class="cl2"><span class="cn2">b)</span><span class="ce">5/10 = <strong style="color:var(--teal);">1/2 = 50 %</strong></span></div>
+            <div class="cl2"><span class="cn2">c)</span><span class="ce">3/10 = <strong style="color:var(--rose);">30 %</strong></span></div>
+            <div class="cl2"><span class="cn2">d)</span><span class="ce">8/10 = <strong style="color:var(--violet);">4/5 = 80 %</strong></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EX 4 -->
+      <div class="exblk">
+        <div class="exhdr"><div class="extitle">Exercice 4 — Diagramme circulaire (calcul)</div><div class="badge bhard">Difficile</div></div>
+        <div class="exbody">
+          <p style="margin-bottom:12px;">30 élèves ont indiqué leur sport préféré :</p>
+          <div style="overflow-x:auto;margin-bottom:12px;">
+            <table class="stat-table">
+              <thead><tr><th>Sport</th><th>Football</th><th>Natation</th><th>Tennis</th><th>Autre</th><th>Total</th></tr></thead>
+              <tbody>
+                <tr><td>Effectif</td><td>12</td><td>9</td><td>6</td><td>3</td><td class="hi3">30</td></tr>
+                <tr><td>Fréquence (%)</td><td class="hi">?</td><td class="hi">?</td><td class="hi">?</td><td class="hi">?</td><td>100 %</td></tr>
+                <tr><td>Angle (°)</td><td class="hi2">?</td><td class="hi2">?</td><td class="hi2">?</td><td class="hi2">?</td><td>360°</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="exol">
+            <li><span class="exnum">a</span><span>Calcule la fréquence de chaque sport (en %).</span></li>
+            <li><span class="exnum">b</span><span>Calcule l'angle de chaque secteur (Coefficient = 360 ÷ 30 = 12).</span></li>
+            <li><span class="exnum">c</span><span>Vérifie que la somme des angles = 360°.</span></li>
+          </ul>
+          <button class="corrBtn" onclick="tgl('c4')">▶ Voir la correction</button>
+          <div class="corrPanel" id="c4">
+            <div class="cl2"><span class="cn2">Coefficient</span><span class="ce">360 ÷ 30 = <strong style="color:var(--amber);">12</strong></span></div>
+            <div class="cl2"><span class="cn2">Football</span><span class="ce">40 % — <strong style="color:var(--teal);">144°</strong></span></div>
+            <div class="cl2"><span class="cn2">Natation</span><span class="ce">30 % — <strong style="color:var(--violet);">108°</strong></span></div>
+            <div class="cl2"><span class="cn2">Tennis</span><span class="ce">20 % — <strong style="color:var(--sky);">72°</strong></span></div>
+            <div class="cl2"><span class="cn2">Autre</span><span class="ce">10 % — <strong style="color:var(--amber);">36°</strong></span></div>
+            <div class="cl2"><span class="cn2">Vérification</span><span class="ce"><strong style="color:var(--teal);">144+108+72+36 = 360° ✓</strong></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════════════════════════════════
+         S7 : ENTRAÎNEMENT ALÉATOIRE
+    ══════════════════════════════════════════════ -->
+    <div class="section" id="s7">
+      <div class="sec-hdr">
+        <div class="sec-n">07</div>
+        <div>
+          <div class="sec-title">Entraînement rapide</div>
+          <div class="sec-sub">Questions aléatoires pour s'exercer</div>
+        </div>
+      </div>
+      <div class="rand-box">
+        <div class="rand-display" id="randDisplay">Clique sur "Nouvelle question" pour commencer !</div>
+        <div class="rand-btns">
+          <button class="rand-btn" onclick="newRand()">🎲 Nouvelle question</button>
+          <button class="rand-btn" onclick="showRandCorr()">✓ Voir la réponse</button>
+        </div>
+        <div class="rand-corr" id="randCorr"></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════════════════════════════════
+         S8 : QUIZ FINAL
+    ══════════════════════════════════════════════ -->
+    <div class="section" id="s8">
+      <div class="sec-hdr">
+        <div class="sec-n">08</div>
+        <div>
+          <div class="sec-title">Quiz final</div>
+          <div class="sec-sub">10 questions pour valider le chapitre</div>
+        </div>
+      </div>
+      <div id="qcontainer"></div>
+      <button class="qsubmit" onclick="submitQ()" id="qsubmit">✦ Soumettre mes réponses</button>
+      <button class="qsubmit" onclick="restartQ()" style="background:var(--s2);color:var(--txt);margin-left:8px;">↺ Recommencer</button>
+      <div class="qresult" id="qresult">
+        <div class="rscore" id="rscore"></div>
+        <div class="rbar"><div class="rbarfill" id="rbarfill" style="width:0%"></div></div>
+        <div class="rmsg" id="rmsg"></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════════════════════════════════
+         S9 : SYNTHÈSE
+    ══════════════════════════════════════════════ -->
+    <div class="section" id="s9">
+      <div class="sec-hdr">
+        <div class="sec-n">09</div>
+        <div>
+          <div class="sec-title">Synthèse du chapitre</div>
+          <div class="sec-sub">Toutes les formules et définitions clés</div>
+        </div>
+      </div>
+      <div class="fbox">
+        <div class="fcard">
+          <div class="fcard-title">Fréquence</div>
+          <div style="font-size:12px;color:var(--soft);margin:6px 0;">Part d'une valeur</div>
+          <div class="fcard-formula">f = eff ÷ total × 100</div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Moyenne simple</div>
+          <div style="font-size:12px;color:var(--soft);margin:6px 0;">Valeurs distinctes</div>
+          <div class="fcard-formula">m = somme / n</div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Angle camembert</div>
+          <div style="font-size:12px;color:var(--soft);margin:6px 0;">Diagramme circulaire</div>
+          <div class="fcard-formula">eff ÷ total × 360°</div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Probabilité</div>
+          <div style="font-size:12px;color:var(--soft);margin:6px 0;">Équiprobabilité</div>
+          <div class="fcard-formula">P = fav. / total</div>
+          <div class="fcard-formula2">0 ≤ P ≤ 1</div>
+        </div>
+      </div>
+      <div class="card ctip">
+        <p><strong>Les 5 réflexes à avoir :</strong></p>
+        <ul class="cl" style="margin-top:8px;">
+          <li><span class="cn">1</span><span>Calculer d'abord l'<strong>effectif total</strong> avant toute fréquence ou angle.</span></li>
+          <li><span class="cn">2</span><span>Vérifier que la <strong>somme des fréquences = 100 %</strong>.</span></li>
+          <li><span class="cn">3</span><span>Vérifier que la <strong>somme des angles = 360°</strong> dans un camembert.</span></li>
+          <li><span class="cn">4</span><span>En probabilités, <strong>lister toutes les issues</strong> et compter soigneusement.</span></li>
+          <li><span class="cn">5</span><span>Une probabilité est <strong>toujours entre 0 et 1</strong>.</span></li>
+        </ul>
+      </div>
+
+      <!-- Bouton fin de cours -->
+      <div style="margin-top:28px;text-align:center;">
+        <button onclick="gShowEndScreen()" style="
+          padding:14px 40px;border-radius:12px;
+          background:linear-gradient(135deg,var(--violet) 0%,var(--sky) 100%);
+          border:none;color:#fff;
+          font-family:'Plus Jakarta Sans';font-size:15px;font-weight:800;
+          text-transform:uppercase;letter-spacing:1px;
+          cursor:pointer;box-shadow:0 4px 24px rgba(160,125,255,0.35);
+          transition:transform 0.2s, opacity 0.2s;
+        " onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+          🏆 Voir mon bilan final
+        </button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══════════════════════════════════════════════
+         FEEDBACK
+    ══════════════════════════════════════════════ -->
+    <div class="section" id="sfeedback">
+      <div class="sec-hdr">
+        <div class="sec-n">★</div>
+        <div>
+          <div class="sec-title">Votre avis</div>
+          <div class="sec-sub">Aidez à améliorer ce cours</div>
+        </div>
+      </div>
+      <p style="margin-bottom:12px;">Ce cours vous a-t-il aidé ? Donnez une note et laissez un commentaire :</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <span class="note-chip" onclick="selectNote(1,this)">1 ★</span>
+        <span class="note-chip" onclick="selectNote(2,this)">2 ★★</span>
+        <span class="note-chip" onclick="selectNote(3,this)">3 ★★★</span>
+        <span class="note-chip" onclick="selectNote(4,this)">4 ★★★★</span>
+        <span class="note-chip" onclick="selectNote(5,this)">5 ★★★★★</span>
+      </div>
+      <textarea class="fb-textarea" id="fbMessage" rows="4" placeholder="Vos remarques, suggestions ou questions…"></textarea>
+      <div id="feedbackOk" style="display:none;color:var(--teal);font-size:13px;margin-top:8px;">✓ Merci pour votre retour !</div>
+      <div id="feedbackErr" style="display:none;color:var(--rose);font-size:13px;margin-top:8px;">Une erreur est survenue. Merci de réessayer.</div>
+      <br>
+      <button class="fb-submit" onclick="sendFeedback()">📧 Envoyer l'avis</button>
+    </div>
+
+  </div><!-- .content -->
+</div><!-- .main -->
+
+<!-- ══════════════════════════════════════════════
+     JAVASCRIPT — tout consolidé ici
+══════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ════════════════════════════════════════════
+   TOGGLE THEME
+════════════════════════════════════════════ */
+let isLight = false;
+function toggleTheme() {
+  isLight = !isLight;
+  document.body.classList.toggle('light', isLight);
+  document.getElementById('themeLabel').textContent = isLight ? '🌙 Mode nuit' : '☀️ Mode jour';
+  document.getElementById('toggleTrack').classList.toggle('on', isLight);
+  localStorage.setItem('julien_theme', isLight ? 'light' : 'dark');
+}
+(function(){
+  if (localStorage.getItem('julien_theme') === 'light') {
+    isLight = true;
+    document.body.classList.add('light');
+    document.getElementById('themeLabel').textContent = '🌙 Mode nuit';
+    document.getElementById('toggleTrack').classList.add('on');
+  }
+})();
+
+/* ════════════════════════════════════════════
+   TOGGLE CORRECTION (cours proba — .corrPanel)
+════════════════════════════════════════════ */
+function tgl(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('on');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('on') ? '▼ Masquer la correction' : '▶ Voir la correction';
+}
+
+/* ════════════════════════════════════════════
+   TOGGLE CORRECTION CAMEMBERT (.pie-corrPanel)
+════════════════════════════════════════════ */
+function tglPie(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('on');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('on') ? '▼ Masquer la correction' : '▶ Voir la correction';
+}
+
+/* ════════════════════════════════════════════
+   DIAGRAMME CIRCULAIRE INTERACTIF
+   Données facilement modifiables ici :
+════════════════════════════════════════════ */
+const PIE_DATA = [
+  { label: '🎤 Rap / Hip-hop', effectif: 16, color: '#e8502a' },
+  { label: '🎸 Rock / Metal',  effectif:  7, color: '#2e7fb8' },
+  { label: '💃 Pop',           effectif: 11, color: '#3aaa7a' },
+  { label: '🎵 R&B / Soul',    effectif:  4, color: '#e8a820' },
+  { label: '🎻 Classique',     effectif:  2, color: '#9b6bb5' },
+];
+const PIE_TOTAL = PIE_DATA.reduce((s, d) => s + d.effectif, 0);
+const PIE_COEFF = 360 / PIE_TOTAL;
+
+/* Calcule angle & fréquence pour chaque entrée */
+PIE_DATA.forEach(d => {
+  d.freq  = (d.effectif / PIE_TOTAL * 100).toFixed(1);
+  d.angle = Math.round(d.effectif * PIE_COEFF);
+});
+
+/* ── Remplir le tableau HTML ── */
+function fillPieDataTable() {
+  const tbody = document.getElementById('pieDataTableBody');
+  tbody.innerHTML = '';
+  PIE_DATA.forEach(d => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="text-align:left;font-weight:500;">${d.label}</td>
+      <td>${d.effectif}</td>
+      <td style="color:var(--teal);font-weight:700;">${d.freq} %</td>
+      <td style="color:var(--violet);font-weight:700;">${d.angle}°</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  const total = document.createElement('tr');
+  total.className = 'pie-total';
+  total.innerHTML = `<td>TOTAL</td><td>${PIE_TOTAL}</td><td>100 %</td><td>360°</td>`;
+  tbody.appendChild(total);
+}
+
+/* ── SVG : conversion polaire → cartésien ── */
+function polarToXY(cx, cy, r, angleDeg) {
+  const rad = (angleDeg - 90) * Math.PI / 180;
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+
+/* ── Construire les secteurs SVG ── */
+function buildPieSVG(svgId, data, cx, cy, r, interactive) {
+  const svg = document.getElementById(svgId);
+  svg.innerHTML = '';
+  let cumAngle = 0;
+  data.forEach((d, i) => {
+    const startA = cumAngle;
+    const sweep  = d.angle;
+    cumAngle += sweep;
+    const s = polarToXY(cx, cy, r, startA);
+    const e = polarToXY(cx, cy, r, cumAngle);
+    const largeArc = sweep > 180 ? 1 : 0;
+    const pathD = `M ${cx} ${cy} L ${s.x.toFixed(2)} ${s.y.toFixed(2)} A ${r} ${r} 0 ${largeArc} 1 ${e.x.toFixed(2)} ${e.y.toFixed(2)} Z`;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', pathD);
+    path.setAttribute('fill', d.color);
+    path.setAttribute('stroke', 'var(--bg)');
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('class', 'pie-sector');
+    path.setAttribute('data-index', i);
+    path.style.transformOrigin = `${cx}px ${cy}px`;
+    path.style.opacity = '0';
+    path.style.transition = 'opacity 0.4s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), filter 0.25s';
+    if (interactive) {
+      path.addEventListener('click', () => onSectorClick(i, path, svgId));
+    }
+    svg.appendChild(path);
+    setTimeout(() => { path.style.opacity = '1'; }, i * 100 + 200);
+  });
+}
+
+/* ── Clic sur un secteur ── */
+let activePieIdx = null;
+function onSectorClick(idx, clickedPath, svgId) {
+  const d = PIE_DATA[idx];
+  document.querySelectorAll(`#${svgId} .pie-sector`).forEach(p => p.classList.remove('pie-active'));
+  if (activePieIdx === idx) {
+    activePieIdx = null;
+    document.getElementById('pieInfoPanel').classList.remove('show');
+    document.getElementById('pdhVal').textContent = PIE_TOTAL;
+    document.getElementById('pieDonutHole').style.borderColor = 'var(--border)';
+    document.querySelectorAll('#pieLegend .pie-legend-item').forEach(li => li.classList.remove('pie-active'));
+    return;
+  }
+  activePieIdx = idx;
+  clickedPath.classList.add('pie-active');
+  document.getElementById('pdhVal').textContent = d.effectif;
+  document.getElementById('pieDonutHole').style.borderColor = d.color;
+  document.querySelectorAll('#pieLegend .pie-legend-item').forEach((li, i) => li.classList.toggle('pie-active', i === idx));
+  document.getElementById('pipTitle').textContent  = d.label;
+  document.getElementById('pipTitle').style.color  = d.color;
+  document.getElementById('pipEff').textContent    = `${d.effectif} élèves sur ${PIE_TOTAL}`;
+  document.getElementById('pipFreq').textContent   = `${d.freq} %`;
+  document.getElementById('pipCalc').textContent   = `${d.effectif} ÷ ${PIE_TOTAL} × 360 = ${d.effectif} × ${PIE_COEFF.toFixed(2)} = ${d.angle}°`;
+  document.getElementById('pipAngle').textContent  = `${d.angle}°`;
+  document.getElementById('pieInfoPanel').classList.add('show');
+}
+
+/* ── Construire la légende ── */
+function buildPieLegend() {
+  const legend = document.getElementById('pieLegend');
+  legend.innerHTML = '';
+  PIE_DATA.forEach((d, i) => {
+    const item = document.createElement('div');
+    item.className = 'pie-legend-item';
+    item.innerHTML = `
+      <span class="pie-legend-dot" style="background:${d.color}"></span>
+      <span class="pie-legend-name">${d.label}</span>
+      <span class="pie-legend-pct">${d.freq} %</span>
+    `;
+    item.addEventListener('click', () => {
+      const path = document.querySelector(`#pieSvg .pie-sector[data-index="${i}"]`);
+      onSectorClick(i, path, 'pieSvg');
+    });
+    legend.appendChild(item);
+  });
+}
+
+/* ── Camembert exercice C (sports, 80 élèves) ── */
+const EXO3_DATA = [
+  { label: '🎮 Action/FPS', angle: 144, color: '#e8502a' },
+  { label: '⚔️ RPG',        angle: 108, color: '#2e7fb8' },
+  { label: '🏎️ Course',     angle:  72, color: '#3aaa7a' },
+  { label: '🧩 Puzzle',     angle:  36, color: '#e8a820' },
+];
+function buildExo3Pie() {
+  // Recalculer effectifs pour le SVG
+  EXO3_DATA.forEach(d => { d.effectif = Math.round(d.angle / 360 * 80); });
+  buildPieSVG('pieExo3Svg', EXO3_DATA, 90, 90, 82, false);
+  const leg = document.getElementById('pieExo3Legend');
+  leg.innerHTML = '';
+  EXO3_DATA.forEach(d => {
+    const item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:10px;font-size:13.5px;';
+    item.innerHTML = `
+      <span style="width:12px;height:12px;border-radius:3px;background:${d.color};display:inline-block;flex-shrink:0;"></span>
+      <span>${d.label}</span>
+      <span style="font-family:'DM Mono';font-size:12px;color:var(--muted);margin-left:auto;">${d.angle}°</span>
+    `;
+    leg.appendChild(item);
+  });
+}
+
+/* ── Remplir exercice A après correction ── */
+function fillPieExo1() {
+  const ans = [
+    { f:'40 %', a:'144°' }, { f:'20 %', a:'72°' },
+    { f:'30 %', a:'108°' }, { f:'10 %', a:'36°' },
+  ];
+  ans.forEach((d,i)=>{
+    const fi = document.getElementById(`pef${i+1}`);
+    const ai = document.getElementById(`pea${i+1}`);
+    if(fi) fi.textContent = d.f;
+    if(ai) ai.textContent = d.a;
+  });
+}
+
+/* ── Vérifier exercice B (écrans) ── */
+function checkPieExo2() {
+  const rows = document.querySelectorAll('#pieExo2Table tbody tr[data-ans]');
+  let correct = 0;
+  rows.forEach(row => {
+    const expected = parseInt(row.dataset.ans);
+    const input = row.querySelector('.pie-input');
+    const val = parseInt(input.value);
+    input.classList.remove('pi-ok','pi-ko');
+    if (val === expected) { input.classList.add('pi-ok'); correct++; }
+    else input.classList.add('pi-ko');
+  });
+  const fb = document.getElementById('pieFb2');
+  fb.classList.add('show');
+  if (correct === rows.length) {
+    fb.style.color = 'var(--teal)';
+    fb.textContent = `✓ Parfait ! Tous les angles sont corrects. Somme = 360° ✓`;
+  } else {
+    fb.style.color = 'var(--rose)';
+    fb.textContent = `${correct}/${rows.length} bonne(s) réponse(s). Cases rouges = erreurs. Essaie encore !`;
+  }
+}
+
+/* ── INIT camembert ── */
+fillPieDataTable();
+buildPieSVG('pieSvg', PIE_DATA, 120, 120, 108, true);
+buildPieLegend();
+buildExo3Pie();
+
+/* ════════════════════════════════════════════
+   ENTRAÎNEMENT ALÉATOIRE
+════════════════════════════════════════════ */
+let rType = null, rA = null, rB = null, rAns = null;
+const randQ = [
+  () => {
+    rA = Math.floor(Math.random()*10)+1;
+    rB = rA + Math.floor(Math.random()*15)+5;
+    rAns = Math.round(rA/rB*1000)/10;
+    rType = 'freq';
+    return `Effectif : ${rA} — Effectif total : ${rB}\nCalcule la fréquence en %.`;
+  },
+  () => {
+    const vals = Array.from({length:5}, () => Math.floor(Math.random()*15)+1);
+    rAns = Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10;
+    rType = 'moy'; rA = vals;
+    return `Calcule la moyenne de : ${vals.join(' — ')}`;
+  },
+  () => {
+    const face = Math.floor(Math.random()*6)+1;
+    rAns = '1/6'; rType = 'de'; rA = face;
+    return `On lance un dé à 6 faces.\nQuelle est la probabilité d'obtenir le ${face} ?`;
+  },
+  () => {
+    const verte = Math.floor(Math.random()*5)+1;
+    const rouge = Math.floor(Math.random()*4)+1;
+    const total = verte + rouge;
+    rA = verte; rB = total;
+    const g = (a,b) => b===0?a:g(b,a%b);
+    const gg = g(verte,total);
+    rAns = `${verte/gg}/${total/gg}`;
+    rType = 'boule';
+    return `Sac : ${verte} boules vertes et ${rouge} boules rouges.\nP(boule verte) = ?`;
+  },
+  () => {
+    const eff = Math.floor(Math.random()*8)+2;
+    const tot = eff + Math.floor(Math.random()*10)+5;
+    rA = eff; rB = tot;
+    rAns = Math.round(eff/tot*360);
+    rType = 'angle';
+    return `Effectif : ${eff} — Total : ${tot}\nAngle du secteur dans un diagramme circulaire (en °) ?`;
+  },
+];
+function newRand() {
+  const fn = randQ[Math.floor(Math.random()*randQ.length)];
+  document.getElementById('randDisplay').textContent = fn();
+  const rc = document.getElementById('randCorr');
+  rc.classList.remove('on'); rc.innerHTML = '';
+}
+function showRandCorr() {
+  if (!rType) { newRand(); return; }
+  const el = document.getElementById('randCorr');
+  let html = '';
+  if (rType==='freq') {
+    html = `<div style="display:flex;gap:14px;padding:2px 0;"><span style="color:var(--violet);font-weight:500;min-width:100px;">Calcul</span><span>${rA} ÷ ${rB} × 100</span></div>
+            <div style="display:flex;gap:14px;padding:2px 0;"><span style="color:var(--violet);font-weight:500;min-width:100px;">Réponse</span><span style="color:var(--teal);font-weight:700;">${rAns} %</span></div>`;
+  } else if (rType==='moy') {
+    html = `<div style="display:flex;gap:14px;padding:2px 0;"><span style="color:var(--violet);font-weight:500;min-width:100px;">Somme</span><span>${rA.join('+')} = ${rA.reduce((a,b)=>a+b,0)}</span></div>
+            <div style="display:flex;gap:14px;padding:2px 0;"><span style="color:var(--violet);font-weight:500;min-width:100px;">Moyenne</span><span style="color:var(--teal);font-weight:700;">${rAns}</span></div>`;
+  } else if (rType==='de') {
+    html = `<div style="display:flex;gap:14px;padding:2px 0;"><span style="color:var(--violet);font-weight:500;min-width:100px;">Issues fav.</span><span>1 (le « ${rA} »)</span></div>
+            <div style="display:flex;gap:14px;padding:2px 0;"><span style="color:var(--violet);font-weight:500;min-width:100px;">Probabilité</span><span style="color:var(--teal);font-weight:700;">1/6 ≈ 16,7 %</span></div>`;
+  } else if (rType==='boule') {
+    html = `<div style="display:flex;gap:14px;padding:2px 0;"><span style="color:var(--violet);font-weight:500;min-width:100px;">Issues fav.</span><span>${rA} boules vertes</span></div>
+            <div style="display:flex;gap:14px;padding:2px 0;"><span style="color:var(--violet);font-weight:500;min-width:100px;">Probabilité</span><span style="color:var(--teal);font-weight:700;">${rAns} ≈ ${Math.round(rA/rB*1000)/10} %</span></div>`;
+  } else if (rType==='angle') {
+    html = `<div style="display:flex;gap:14px;padding:2px 0;"><span style="color:var(--violet);font-weight:500;min-width:100px;">Calcul</span><span>${rA} ÷ ${rB} × 360</span></div>
+            <div style="display:flex;gap:14px;padding:2px 0;"><span style="color:var(--violet);font-weight:500;min-width:100px;">Angle</span><span style="color:var(--teal);font-weight:700;">${rAns}°</span></div>`;
+  }
+  el.innerHTML = html;
+  el.classList.add('on');
+}
+
+/* ════════════════════════════════════════════
+   QUIZ FINAL
+════════════════════════════════════════════ */
+const QD = [
+  {q:'Un tableau a 8 élèves dans une catégorie sur 40 au total. Quelle est la fréquence ?', opts:['15 %','20 %','25 %','32 %'], ans:1},
+  {q:'La somme des effectifs d\'un tableau de fréquences doit être égale à…', opts:['100 %','1','360°','Indéterminé'], ans:0},
+  {q:'Moyenne simple de : 10 — 14 — 8 — 12 — 16', opts:['10','11','12','13'], ans:2},
+  {q:'Dans un tableau : valeur 3 avec effectif 5. Sa contribution à la somme pondérée est…', opts:['3','5','8','15'], ans:3},
+  {q:'Lancer un dé à 6 faces : P(nombre pair) = ?', opts:['1/6','1/3','1/2','2/3'], ans:2},
+  {q:'Un sac contient 2 rouges, 3 bleues, 5 vertes. P(non verte) = ?', opts:['1/2','5/10','2/5','1/5'], ans:0},
+  {q:'Une expérience aléatoire est…', opts:['Toujours prévisible','Jamais possible','D\'issue non prévisible','Toujours la même issue'], ans:2},
+  {q:'Dans un diagramme circulaire, un groupe représente 25 % du total. Son angle est…', opts:['25°','90°','45°','180°'], ans:1},
+  {q:'La somme des angles d\'un diagramme circulaire vaut toujours…', opts:['180°','270°','360°','400°'], ans:2},
+  {q:'P(événement impossible) = ?', opts:['0,5','1','0','Indéfini'], ans:2},
+];
+let UA = new Array(QD.length).fill(null), done = false;
+function buildQ() {
+  const c = document.getElementById('qcontainer');
+  c.innerHTML = ''; UA = new Array(QD.length).fill(null); done = false;
+  document.getElementById('qresult').classList.remove('on');
+  document.getElementById('qsubmit').disabled = false;
+  QD.forEach((item, qi) => {
+    const d = document.createElement('div');
+    d.className = 'qblk';
+    d.innerHTML = `<div class="qtext">Q${qi+1}. <span class="qeq">${item.q}</span></div>`;
+    const opts = document.createElement('div');
+    opts.className = 'qopts';
+    item.opts.forEach((o, oi) => {
+      const b = document.createElement('button');
+      b.className = 'qopt'; b.textContent = o;
+      b.onclick = () => {
+        if (done) return;
+        UA[qi] = oi;
+        opts.querySelectorAll('.qopt').forEach(x => x.classList.remove('sel'));
+        b.classList.add('sel');
+      };
+      opts.appendChild(b);
+    });
+    d.appendChild(opts); c.appendChild(d);
+  });
+}
+function submitQ() {
+  if (done) return; done = true; let score = 0;
+  QD.forEach((item, qi) => {
+    const opts = document.querySelectorAll('#qcontainer .qblk')[qi].querySelectorAll('.qopt');
+    opts.forEach((b, oi) => {
+      b.disabled = true;
+      if (oi === item.ans) b.classList.add('good');
+      else if (oi === UA[qi]) b.classList.add('bad');
+    });
+    if (UA[qi] === item.ans) score++;
+  });
+  const pct = Math.round(score/QD.length*100);
+  document.getElementById('rscore').textContent = score+' / '+QD.length;
+  document.getElementById('rscore').style.color = pct>=70?'var(--teal)':pct>=50?'var(--amber)':'var(--rose)';
+  document.getElementById('rbarfill').style.width = pct+'%';
+  document.getElementById('rbarfill').style.background = pct>=70?'var(--teal)':pct>=50?'var(--amber)':'var(--rose)';
+  document.getElementById('rmsg').textContent =
+    pct===100?'Parfait ! Stats et probas n\'ont plus de secrets pour toi !' :
+    pct>=80 ?'Très bien ! Quelques notions à revoir.' :
+    pct>=60 ?'Pas mal — relis les formules de probabilité et de moyenne.' :
+    pct>=40 ?'Retravailler le cours, surtout les effectifs, fréquences et probabilités.' :
+    'Relis le cours depuis le début, étape par étape. Tu vas y arriver !';
+  const re = document.getElementById('qresult');
+  re.style.background = pct>=70?'var(--teal-d)':pct>=50?'var(--amber-d)':'var(--rose-d)';
+  re.style.border = '1px solid '+(pct>=70?'var(--teal-b)':pct>=50?'var(--amber-b)':'var(--rose-b)');
+  re.classList.add('on');
+  document.getElementById('qsubmit').disabled = true;
+}
+function restartQ() { buildQ(); }
+buildQ();
+
+/* ════════════════════════════════════════════
+   FEEDBACK
+════════════════════════════════════════════ */
+let selectedNote = null;
+function selectNote(n, el) {
+  selectedNote = n;
+  document.querySelectorAll('.note-chip').forEach(c => {
+    c.style.borderColor='var(--border)'; c.style.color='var(--soft)'; c.style.background='var(--s2)';
+  });
+  el.style.borderColor='var(--amber-b)'; el.style.color='var(--amber)'; el.style.background='var(--amber-d)';
+}
+function sendFeedback() {
+  const msg  = document.getElementById('fbMessage').value.trim();
+  const note = selectedNote ? selectedNote+'/5' : 'Non renseignée';
+  const btn  = document.querySelector('.fb-submit');
+  btn.disabled = true; btn.textContent = '⏳ Envoi en cours…';
+  fetch('https://formspree.io/f/mojyzprj', {
+    method:'POST',
+    headers:{'Accept':'application/json','Content-Type':'application/json'},
+    body: JSON.stringify({ subject:'Avis cours M.Julien – Stats & Probas 5ème', note, message: msg||'(Aucun commentaire)' })
+  }).then(res => {
+    if (res.ok) {
+      document.getElementById('feedbackOk').style.display='block';
+      document.getElementById('feedbackErr').style.display='none';
+      document.getElementById('fbMessage').value='';
+      btn.textContent='✅ Envoyé !';
+    } else throw new Error();
+  }).catch(() => {
+    document.getElementById('feedbackErr').style.display='block';
+    document.getElementById('feedbackOk').style.display='none';
+    btn.disabled=false; btn.textContent='📧 Envoyer l\'avis';
+  });
+}
+
+/* ════════════════════════════════════════════════════════
+   GAMIFICATION ENGINE — M. Julien · Stats & Probas 5ème
+   Entièrement additionnel, aucune modification du code existant
+════════════════════════════════════════════════════════ */
+
+/* ── État global persisté dans localStorage ── */
+const G_KEY = 'julien_game_v2';
+let G = loadGState();
+
+function loadGState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(G_KEY));
+    if (saved && typeof saved.xp === 'number') return saved;
+  } catch(e) {}
+  return {
+    xp: 0,
+    skills: { stat: 0, diag: 0, prob: 0 },
+    badges: { stat: false, diag: false, prob: false, quiz: false, all: false },
+    mode: 'normal',
+    challengesDone: {},   // tracks which section challenges are done
+    quizScore: 0,
+  };
+}
+
+function saveGState() {
+  try { localStorage.setItem(G_KEY, JSON.stringify(G)); } catch(e) {}
+}
+
+/* ── Niveaux ── */
+const G_LEVELS = [
+  { min:0,   max:50,  name:'Débutant',      sub:'Niveau 1', icon:'🌱', color:'var(--muted)' },
+  { min:50,  max:120, name:'Intermédiaire', sub:'Niveau 2', icon:'📊', color:'var(--sky)'   },
+  { min:120, max:999, name:'Expert',        sub:'Niveau 3', icon:'⭐', color:'var(--amber)'  },
+];
+
+function gCurrentLevel() {
+  return G_LEVELS.find(l => G.xp >= l.min && G.xp < l.max) || G_LEVELS[G_LEVELS.length-1];
+}
+
+/* ── Mise à jour du HUD ── */
+function gRefreshHUD() {
+  const lvl = gCurrentLevel();
+  const nextThreshold = lvl.max === 999 ? G.xp + 10 : lvl.max;
+  const pct = Math.min(100, Math.round((G.xp - lvl.min) / (nextThreshold - lvl.min) * 100));
+
+  // Niveau
+  document.getElementById('gLevelIcon').textContent = lvl.icon;
+  document.getElementById('gLevelName').textContent = lvl.name;
+  document.getElementById('gLevelSub').textContent  = lvl.sub;
+
+  // XP barre
+  document.getElementById('gXPLabel').textContent = lvl.max === 999
+    ? `${G.xp} XP — Expert !`
+    : `${G.xp} / ${nextThreshold}`;
+  document.getElementById('gXPFill').style.width = pct + '%';
+
+  // Compétences (max affiché = 60 XP par compétence)
+  const MAX_SKILL = 60;
+  ['stat','diag','prob'].forEach(sk => {
+    const p = Math.min(100, Math.round(G.skills[sk] / MAX_SKILL * 100));
+    document.getElementById(`gSk${sk.charAt(0).toUpperCase()+sk.slice(1)}Fill`).style.width = p+'%';
+    document.getElementById(`gSk${sk.charAt(0).toUpperCase()+sk.slice(1)}XP`).textContent   = G.skills[sk];
+  });
+
+  // Badges HUD
+  Object.keys(G.badges).forEach(b => {
+    const el = document.getElementById('gb-'+b);
+    if (el) el.classList.toggle('unlocked', !!G.badges[b]);
+  });
+
+  // Sidebar mini XP
+  document.getElementById('gSideXP').textContent  = G.xp + ' pts';
+  document.getElementById('gSideFill').style.width = pct + '%';
+
+  saveGState();
+}
+
+/* ── Ajouter XP avec toast et popup ── */
+function gAddXP(amount, skill, label, event) {
+  const multiplier = G.mode === 'hard' ? 2 : 1;
+  const earned = amount * multiplier;
+  G.xp += earned;
+  if (skill && G.skills[skill] !== undefined) G.skills[skill] += earned;
+
+  // Popup flottante au point de clic
+  if (event) {
+    const pop = document.createElement('div');
+    pop.className = 'g-xp-pop';
+    pop.textContent = '+' + earned + ' XP';
+    pop.style.left = (event.clientX - 20) + 'px';
+    pop.style.top  = (event.clientY - 20) + 'px';
+    document.body.appendChild(pop);
+    setTimeout(() => pop.remove(), 1500);
+  }
+
+  // Toast
+  const msg = skill
+    ? `+${earned} XP en ${label || skill} ${multiplier>1?'× 2 Expert':''}`
+    : `+${earned} XP`;
+  gToast(msg, 'toast-xp');
+
+  gCheckBadges();
+  gRefreshHUD();
+}
+
+/* ── Toast ── */
+function gToast(msg, cls = '') {
+  const container = document.getElementById('gToastContainer');
+  const t = document.createElement('div');
+  t.className = 'g-toast ' + cls;
+  t.innerHTML = msg;
+  container.appendChild(t);
+  setTimeout(() => t.remove(), 2900);
+}
+
+/* ── Vérification des badges ── */
+function gCheckBadges() {
+  const prev = { ...G.badges };
+
+  if (G.skills.stat >= 30 && !G.badges.stat)  { G.badges.stat = true; gUnlockBadge('📊', 'Maître des statistiques'); }
+  if (G.skills.diag >= 30 && !G.badges.diag)  { G.badges.diag = true; gUnlockBadge('📈', 'Expert des diagrammes'); }
+  if (G.skills.prob >= 30 && !G.badges.prob)  { G.badges.prob = true; gUnlockBadge('🎲', 'Boss des probabilités'); }
+  if (G.quizScore >= 7   && !G.badges.quiz)   { G.badges.quiz = true; gUnlockBadge('🏆', 'Champion du quiz'); }
+  if (G.badges.stat && G.badges.diag && G.badges.prob && G.badges.quiz && !G.badges.all) {
+    G.badges.all = true; gUnlockBadge('⭐', 'Maître complet !');
+  }
+}
+
+function gUnlockBadge(icon, name) {
+  gToast(`🏅 Badge débloqué : ${name}`, 'toast-badge');
+}
+
+/* ── Mini-défis ── */
+function gChallenge(sectionId, btn, isCorrect, explanation) {
+  // Bloquer si déjà répondu
+  if (G.challengesDone[sectionId]) return;
+  G.challengesDone[sectionId] = true;
+
+  const container = btn.closest('.g-challenge-opts');
+  container.querySelectorAll('.g-copt').forEach(b => {
+    b.disabled = true;
+    b.classList.remove('gc-ok','gc-ko');
+  });
+
+  const fb = document.getElementById('gcf-' + sectionId);
+  fb.classList.add('show');
+
+  // Mapping section → compétence
+  const skillMap = { s1:'stat', s2:'stat', s3:'diag', s4:'prob', s5:'prob' };
+  const labelMap = { s1:'Statistiques', s2:'Statistiques', s3:'Diagrammes', s4:'Probabilités', s5:'Probabilités' };
+  const sk    = skillMap[sectionId] || 'stat';
+  const label = labelMap[sectionId] || 'Statistiques';
+
+  if (isCorrect) {
+    btn.classList.add('gc-ok');
+    const xpGain = 15;
+    fb.style.color = 'var(--teal)';
+    fb.innerHTML = `✅ <strong>Bien joué ! 🔥</strong> ${explanation ? '→ ' + explanation : ''}<br><span style="font-family:'DM Mono';font-size:12px;color:var(--violet);">+${xpGain} XP en ${label}</span>`;
+    gAddXP(xpGain, sk, label, window._lastEvent);
+
+    // Feedback pédagogique selon mode
+    if (G.mode === 'easy') {
+      setTimeout(() => {
+        fb.innerHTML += `<br><span style="font-size:12px;color:var(--soft);font-style:italic;">💡 Méthode : effectif ÷ total × (100 ou 360 selon l'objectif)</span>`;
+      }, 400);
+    }
+  } else {
+    btn.classList.add('gc-ko');
+    fb.style.color = 'var(--rose)';
+    // Identifier le bouton correct pour le montrer
+    container.querySelectorAll('.g-copt').forEach(b2 => {
+      const onclickStr = b2.getAttribute('onclick') || '';
+      if (onclickStr.includes(',true,')) b2.classList.add('gc-ok');
+    });
+    const hint = G.mode === 'easy'
+      ? `<br><span style="font-size:12px;color:var(--amber);">💡 Indice : pense à diviser l'effectif par le total, puis multiplier.</span>`
+      : '';
+    fb.innerHTML = `❌ <strong>Presque !</strong> La bonne réponse était en vert. → ${explanation || ''}${hint}`;
+  }
+
+  saveGState();
+}
+
+/* ── Capturer l'event de la souris pour la popup XP ── */
+document.addEventListener('click', e => { window._lastEvent = e; });
+
+/* ── Patch du submitQ existant pour donner XP quiz ── */
+const _origSubmitQ = window.submitQ;
+window.submitQ = function() {
+  if (done) return;
+  _origSubmitQ();
+  // Calculer le score depuis les variables du quiz existant
+  setTimeout(() => {
+    let score = 0;
+    QD.forEach((item, qi) => { if (UA[qi] === item.ans) score++; });
+    G.quizScore = score;
+    const pct = Math.round(score / QD.length * 100);
+
+    if (pct === 100) {
+      gAddXP(50, null, null, null);
+      gToast('🎯 Score parfait ! +50 XP', 'toast-xp');
+    } else if (pct >= 70) {
+      gAddXP(30, null, null, null);
+      // Distribuer sur toutes compétences
+      G.skills.stat += 10; G.skills.diag += 10; G.skills.prob += 10;
+    } else {
+      gAddXP(10, null, null, null);
+    }
+
+    // XP par compétence selon questions
+    const qSkills = ['stat','stat','stat','stat','prob','prob','prob','diag','diag','prob'];
+    QD.forEach((item, qi) => {
+      if (UA[qi] === item.ans && qSkills[qi]) G.skills[qSkills[qi]] += 5;
+    });
+
+    gCheckBadges();
+    gRefreshHUD();
+
+    // Feedback intelligent
+    const feedbackEl = document.getElementById('rmsg');
+    if (feedbackEl) {
+      const tips = [];
+      if (UA[2] !== QD[2].ans || UA[3] !== QD[3].ans) tips.push('Revois le calcul de la moyenne pondérée (valeur × effectif).');
+      if (UA[7] !== QD[7].ans || UA[8] !== QD[8].ans) tips.push('Rappel diagramme : Angle = effectif ÷ total × 360°.');
+      if (UA[4] !== QD[4].ans || UA[5] !== QD[5].ans || UA[9] !== QD[9].ans) tips.push('Rappel proba : P = issues favorables ÷ issues totales.');
+      if (tips.length) {
+        feedbackEl.innerHTML += '<br><span style="font-size:12px;color:var(--amber);font-family:\'DM Mono\';">💡 ' + tips.join(' | ') + '</span>';
+      }
+    }
+  }, 200);
+};
+
+/* ── Patch du checkPieExo2 pour XP ── */
+const _origCheckPieExo2 = window.checkPieExo2;
+window.checkPieExo2 = function() {
+  _origCheckPieExo2();
+  setTimeout(() => {
+    const rows = document.querySelectorAll('#pieExo2Table tbody tr[data-ans]');
+    let correct = 0;
+    rows.forEach(row => {
+      const inp = row.querySelector('.pie-input');
+      if (inp && inp.classList.contains('pi-ok')) correct++;
+    });
+    if (correct > 0) {
+      const xp = correct === rows.length ? 20 : 10;
+      gAddXP(xp, 'diag', 'Diagrammes', window._lastEvent);
+    }
+  }, 100);
+};
+
+/* ── Patch du tgl (correction) pour XP ── */
+const _origTgl = window.tgl;
+const _tglDone = {};
+window.tgl = function(id) {
+  _origTgl(id);
+  const el = document.getElementById(id);
+  if (el && el.classList.contains('on') && !_tglDone[id]) {
+    _tglDone[id] = true;
+    // XP selon contexte (exercice lu = 10 XP stat/diag/prob)
+    const skMap = { c1:'stat', c2:'stat', c3:'prob', c4:'diag' };
+    const lbMap = { c1:'Statistiques', c2:'Statistiques', c3:'Probabilités', c4:'Diagrammes' };
+    const sk = skMap[id], lb = lbMap[id];
+    if (sk) gAddXP(10, sk, lb, window._lastEvent);
+  }
+};
+
+/* ── HUD toggle ── */
+function gHUDtoggle() {
+  const hud  = document.getElementById('gHUD');
+  const btn  = document.getElementById('gHUD-toggle');
+  const hidden = hud.classList.toggle('hud-hidden');
+  btn.classList.toggle('hud-hidden', hidden);
+  btn.textContent = hidden ? '◀' : '▶';
+}
+
+/* ── Sélecteur de mode ── */
+function gSetMode(mode, el) {
+  G.mode = mode;
+  document.querySelectorAll('.g-mode-btn').forEach(b => b.classList.remove('gm-active'));
+  el.classList.add('gm-active');
+
+  // Afficher/masquer les indices selon le mode
+  document.querySelectorAll('.g-xp-reward').forEach(r => {
+    r.style.display = mode === 'hard' ? 'none' : 'flex';
+  });
+
+  const modeMsg = { easy:'🟢 Mode Guidé activé — les indices sont disponibles.', normal:'🟡 Mode Normal activé.', hard:'🔴 Mode Expert — XP doublé, sans aide !' };
+  gToast(modeMsg[mode] || '', mode==='hard'?'toast-ko':mode==='easy'?'toast-ok':'');
+  saveGState();
+}
+
+/* ── Écran final ── */
+function gShowEndScreen() {
+  const lvl = gCurrentLevel();
+  const badgeCount = Object.values(G.badges).filter(Boolean).length;
+  const pct = G.xp;
+
+  document.getElementById('gEndXP').textContent    = G.xp + ' XP';
+  document.getElementById('gEndLevel').textContent = lvl.name;
+  document.getElementById('gEndBadges').textContent = `${badgeCount}/5`;
+
+  // Emoji selon performance
+  const emoji = pct >= 120 ? '🏆' : pct >= 50 ? '🎯' : '💪';
+  document.getElementById('gEndEmoji').textContent = emoji;
+
+  // Message motivant
+  const msgs = {
+    expert: 'Tu maîtrises parfaitement les statistiques et probabilités ! 🔥 Tu es prêt pour le brevet.',
+    inter:  'Beau travail ! Encore quelques exercices et tu seras au niveau expert.',
+    debut:  'Continue comme ça ! Chaque défi complété te rapproche de l\'expertise.',
+  };
+  const msgKey = pct >= 120 ? 'expert' : pct >= 50 ? 'inter' : 'debut';
+  document.getElementById('gEndMsg').textContent = msgs[msgKey];
+
+  // Sous-titre
+  document.getElementById('gEndSub').textContent =
+    `${badgeCount} badge(s) débloqué(s) · Mode ${G.mode} · Quiz : ${G.quizScore}/10`;
+
+  // Badges visuels
+  const badgeList = document.getElementById('gEndBadgeList');
+  badgeList.innerHTML = '';
+  const allBadges = [
+    { key:'stat', icon:'📊' }, { key:'diag', icon:'📈' },
+    { key:'prob', icon:'🎲' }, { key:'quiz', icon:'🏆' }, { key:'all', icon:'⭐' }
+  ];
+  allBadges.forEach(b => {
+    const el = document.createElement('div');
+    el.className = 'g-end-badge';
+    el.style.opacity = G.badges[b.key] ? '1' : '0.2';
+    el.style.filter  = G.badges[b.key] ? 'none' : 'grayscale(1)';
+    el.textContent = b.icon;
+    badgeList.appendChild(el);
+  });
+
+  document.getElementById('gEndScreen').classList.add('show');
+}
+
+/* ── INIT gamification ── */
+(function gInit() {
+  // Restaurer mode
+  if (G.mode && G.mode !== 'normal') {
+    const modeBtn = document.querySelector(`.g-mode-btn[data-mode="${G.mode}"]`);
+    if (modeBtn) {
+      document.querySelectorAll('.g-mode-btn').forEach(b => b.classList.remove('gm-active'));
+      modeBtn.classList.add('gm-active');
+    }
+  }
+
+  // Afficher corrections déjà faites
+  Object.keys(_tglDone).forEach(id => {});
+
+  // Cacher XP reward en mode expert
+  if (G.mode === 'hard') {
+    document.querySelectorAll('.g-xp-reward').forEach(r => r.style.display = 'none');
+  }
+
+  gRefreshHUD();
+
+  // Message de bienvenue si nouveau
+  if (G.xp === 0) {
+    setTimeout(() => gToast('👋 Bienvenue, analyste ! Lance les défis pour gagner des XP.', ''), 1000);
+  } else {
+    setTimeout(() => gToast(`Continu ! Tu as déjà ${G.xp} XP 💪`, 'toast-xp'), 800);
+  }
+})();
+</script>
+</body>
+</html>
